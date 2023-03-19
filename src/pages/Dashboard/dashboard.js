@@ -13,7 +13,7 @@ function Dashboard() {
             setDashboardData(response);
         });
     },[])
-    return (<>{dashboardData}</>)
+    return (<>Hiii</>)
 }
 
 export default Dashboard;

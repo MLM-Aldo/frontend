@@ -1,25 +1,51 @@
 import { useContext, useState } from "react";
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
+
 
 function Login() {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     const base_url= 'https://mlm-backend-drdz.onrender.com/';
     // const base_url= 'http://localhost:3001/';
     
-    const signupUser = () => {
-        //  TODO: valiation on fields must be done
+    // const signupUser = () => {
+    //     //  TODO: valiation on fields must be done
 
-        axios.post(base_url + 'users/login', {
-            username: username,
-            password: password
-        }).then((response) => {
-            console.log("loogged in");
-        }).catch((error)=>{
-            console.log(error);
-        })
-    }
+    //     axios.post(base_url + 'users/login', {
+    //         username: username,
+    //         password: password
+    //     }).then((response) => {
+    //         console.log("loogged in");
+    //     }).catch((error)=>{
+    //         console.log(error);
+    //     })
+    // }
+
+    const signupUser = async (e) => {
+        e.preventDefault();
+        try {
+          const response = await fetch('https://mlm-backend-drdz.onrender.com/users/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, password })
+          });
+          const data = await response.json();
+          if (response.ok) {
+            // localStorage.setItem('token', data.token);
+            navigate('/dashboard');
+          } else {
+            setError(data.message);
+          }
+        } catch (error) {
+          setError('An error occurred. Please try again.');
+        }
+      };
     return(
         <div className="auth-page-wrapper pt-5">
         {/* <!-- auth page bg --> */}
@@ -89,6 +115,9 @@ function Login() {
                                         <div className="mt-4">
                                             <button className="btn btn-success w-100" onClick={signupUser}>Login</button>
                                         </div>
+
+                                        {error && <div>{error}</div>}
+
                                         
                                     </form>
 
@@ -99,7 +128,7 @@ function Login() {
                         {/* <!-- end card --> */}
 
                         <div className="mt-4 text-center">
-                            <p className="mb-0">Already have an account ? <a href="signin.html" className="fw-semibold text-primary text-decoration-underline"> Signin </a> </p>
+                            <p className="mb-0">Dont have an account ? <a href="/signup" className="fw-semibold text-primary text-decoration-underline"> Sign Up </a> </p>
                         </div>
 
                     </div>
