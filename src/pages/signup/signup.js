@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
 function Signup() {
 
@@ -8,25 +9,51 @@ function Signup() {
     const [password, setPassword] = useState("")
     const [referredBy, setReferredBy] = useState("")
     const [phone, setPhone] = useState("")
+    const navigate = useNavigate();
+    const [error, setError] = useState('');
+
 
     const base_url= 'https://mlm-backend-drdz.onrender.com/';
     // const base_url= 'http://localhost:3001/';
     
-    const signupUser = () => {
-        //  TODO: valiation on fields must be done
+    // const signupUser = () => {
+    //     //  TODO: valiation on fields must be done
 
-        axios.post(base_url + 'users/register', {
-            username: username,
-            password: password,
-            email: email,
-            phone: Number(phone.toString()),
-            referredBy: referredBy
-        }).then((response) => {
-            console.log("signedup");
-        }).catch((error)=>{
-            console.log(error);
-        })
-    }
+    //     axios.post(base_url + 'users/register', {
+    //         username: username,
+    //         password: password,
+    //         email: email,
+    //         phone: Number(phone.toString()),
+    //         referredBy: referredBy
+    //     }).then((response) => {
+    //         console.log("signedup");
+    //     }).catch((error)=>{
+    //         console.log(error);
+    //     })
+    // }
+
+    const signupUser = async (e) => {
+        e.preventDefault();
+        try {
+          const response = await fetch('https://mlm-backend-drdz.onrender.com/users/register', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, password, email, phone,referredBy })
+          });
+          const data = await response.json();
+          if (response.ok) {
+            // localStorage.setItem('token', data.token);
+            navigate('/login');
+          } else {
+            setError(data.message);
+          }
+        } catch (error) {
+          setError('An error occurred. Please try again.');
+        }
+      };
+
     return(
         <div className="auth-page-wrapper pt-5">
         {/* <!-- auth page bg --> */}
@@ -125,6 +152,8 @@ function Signup() {
                                         <div className="mt-4">
                                             <button className="btn btn-success w-100" onClick={signupUser}>Sign Up</button>
                                         </div>
+
+                                        {error && <div>{error}</div>}
                                         
                                     </form>
 
