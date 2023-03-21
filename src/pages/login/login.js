@@ -1,6 +1,7 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 
 function Login() {
@@ -8,6 +9,13 @@ function Login() {
     const [password, setPassword] = useState("")
     const [error, setError] = useState('');
     const navigate = useNavigate();
+
+    useEffect(()=>{
+        let token = localStorage.getItem('token');
+        if(token) {
+            navigate('/dashboard');
+        }
+    },[])
 
     const base_url= 'https://mlm-backend-drdz.onrender.com/';
     // const base_url= 'http://localhost:3001/';
@@ -37,7 +45,7 @@ function Login() {
           });
           const data = await response.json();
           if (response.ok) {
-            // localStorage.setItem('token', data.token);
+            localStorage.setItem('token', data.user._id);
             navigate('/dashboard');
           } else {
             setError(data.message);
