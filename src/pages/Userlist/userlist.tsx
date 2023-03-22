@@ -1,8 +1,8 @@
 import React from "react";
 
-function UserList() {
+function Userlist() {
 
-    const deleteMultiple= ()=>{
+    const deleteMultiple = () => {
 
     }
     return (
@@ -643,11 +643,11 @@ function UserList() {
                         {/* <!-- container-fluid --> */}
                     </div>
                     {/* <!-- End Page-content --> */}
-                    </div>
+                </div>
             </div>
-            </div>
+        </div>
 
-                    );
+    );
 }
 
-                    export default UserList;
+export default Userlist;
