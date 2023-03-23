@@ -9,34 +9,20 @@ function Login() {
     const [password, setPassword] = useState("")
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const base_url = process.env.REACT_APP_API_URL;
 
     useEffect(()=>{
         let token = localStorage.getItem('token');
         if(token) {
             navigate('/dashboard');
         }
-    },[])
+    },[]);
 
-    const base_url= 'https://mlm-backend-drdz.onrender.com/';
-    // const base_url= 'http://localhost:3001/';
-    
-    // const signupUser = () => {
-    //     //  TODO: valiation on fields must be done
-
-    //     axios.post(base_url + 'users/login', {
-    //         username: username,
-    //         password: password
-    //     }).then((response) => {
-    //         console.log("loogged in");
-    //     }).catch((error)=>{
-    //         console.log(error);
-    //     })
-    // }
 
     const signupUser = async (e) => {
         e.preventDefault();
         try {
-          const response = await fetch('https://mlm-backend-drdz.onrender.com/users/login', {
+          const response = await fetch(base_url + 'users/login', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'

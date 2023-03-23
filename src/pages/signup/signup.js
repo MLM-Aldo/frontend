@@ -13,7 +13,7 @@ function Signup() {
     const [error, setError] = useState('');
 
 
-    const base_url= 'https://mlm-backend-drdz.onrender.com/';
+    const base_url = process.env.REACT_APP_API_URL;
     // const base_url= 'http://localhost:3001/';
     
     // const signupUser = () => {
@@ -35,7 +35,7 @@ function Signup() {
     const signupUser = async (e) => {
         e.preventDefault();
         try {
-          const response = await fetch('https://mlm-backend-drdz.onrender.com/users/register', {
+          const response = await fetch(base_url +'users/register', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'

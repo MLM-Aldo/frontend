@@ -5,6 +5,7 @@ function Dashboard() {
     const [search, setSearch] = useState("");
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const base_url = process.env.REACT_APP_API_URL;
 
     useEffect(()=>{
         let token = localStorage.getItem('token');
@@ -16,7 +17,7 @@ function Dashboard() {
     const logout = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('https://mlm-backend-drdz.onrender.com/users/logout', {
+            const response = await fetch(base_url + 'users/logout', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
