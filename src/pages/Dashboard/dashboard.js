@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import LevelTree from "../Leveltree/Leveltree";
 import Users from '../Userlist/userlist'
 
 function Dashboard() {
@@ -389,6 +390,10 @@ function Dashboard() {
 
                 <div className="page-content">
                     <Users></Users>
+                </div>
+
+                <div className="page-content">
+                    <LevelTree></LevelTree>
                 </div>
                 <footer className="footer">
                     <div className="container-fluid">
