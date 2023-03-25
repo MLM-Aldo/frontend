@@ -123,11 +123,12 @@ function LevelTree() {
     border: 1px solid red;
   `;
   const base_url = process.env.REACT_APP_API_URL;
-
+  const user = JSON.parse(localStorage.getItem('user')) 
 
   const getAllUsers = async () => {
     try {
-      const response = await fetch(base_url + 'users/referrals/dhRn2nNB', {
+      const referralId = user.referralCode
+      const response = await fetch(base_url + 'users/referrals/'+referralId, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
