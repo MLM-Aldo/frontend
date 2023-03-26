@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import LevelTree from "../Leveltree/Leveltree";
 import Users from '../Userlist/userlist'
+import axios from 'axios';
 
 function Dashboard() {
     const [search, setSearch] = useState("");
@@ -22,21 +23,35 @@ function Dashboard() {
     const logout = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(base_url + 'users/logout', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'authorization': 'Bearer ' +token
-                },
+          axios
+            .post(base_url + "users/logout")
+            .then((response) => {
+              localStorage.removeItem("token");
+              localStorage.removeItem("user");
+              navigate("/login");
+            })
+            .catch((error) => {
+              localStorage.removeItem("token");
+              localStorage.removeItem("user");
+              setError(error.message);
+              navigate("/login");
             });
-            const data = await response.json();
-            if (response.ok) {
-                localStorage.removeItem('token');
-                localStorage.removeItem('user');
-                navigate('/login');
-            } else {
-                setError(data.message);
-            }
+
+            // const response = await fetch(base_url + 'users/logout', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //         'authorization': 'Bearer ' +token
+            //     },
+            // });
+            // const data = await response.json();
+            // if (response.ok) {
+            //     localStorage.removeItem('token');
+            //     localStorage.removeItem('user');
+            //     navigate('/login');
+            // } else {
+            //     setError(data.message);
+            // }
         } catch (error) {
             localStorage.removeItem('token');
             localStorage.removeItem('user');
@@ -132,12 +147,11 @@ function Dashboard() {
                       <i className="mdi mdi-cog-outline text-muted fs-16 align-middle me-1"></i>{" "}
                       <span className="align-middle">Settings</span>
                     </a>
-                    <a className="dropdown-item" href="">
+                    <a className="dropdown-item" onClick={logout}>
                       <i className="mdi mdi-logout text-muted fs-16 align-middle me-1"></i>
                       <span
                         className="align-middle"
                         data-key="t-logout"
-                        onClick={logout}
                       >
                         Logout
                       </span>

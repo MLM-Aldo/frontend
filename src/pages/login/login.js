@@ -23,21 +23,34 @@ function Login() {
     const signupUser = async (e) => {
         e.preventDefault();
         try {
-          const response = await fetch(base_url + 'users/login', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ username, password })
-          });
-          const data = await response.json();
-          if (response.ok) {
-            localStorage.setItem('user', JSON.stringify(data.user));
-            localStorage.setItem('token', data.token);
-            navigate('/dashboard');
-          } else {
-            setError(data.message);
-          }
+            axios
+              .post(
+                base_url + "users/login",
+                JSON.stringify({ username, password })
+              )
+              .then((response) => {
+                localStorage.setItem("user", JSON.stringify(response.data.user));
+                localStorage.setItem("token", response.data.token);
+                navigate("/dashboard");
+              })
+              .catch((error) => {
+                setError(error.message);
+              });
+        //   const response = await fetch(base_url + 'users/login', {
+        //     method: 'POST',
+        //     headers: {
+        //       'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify({ username, password })
+        //   });
+        //   const data = await response.json();
+        //   if (response.ok) {
+        //     localStorage.setItem('user', JSON.stringify(data.user));
+        //     localStorage.setItem('token', data.token);
+        //     navigate('/dashboard');
+        //   } else {
+        //     setError(data.message);
+        //   }
         } catch (error) {
           setError('An error occurred. Please try again.');
         }

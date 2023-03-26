@@ -2,6 +2,7 @@ import { Tree, TreeNode } from "react-organizational-chart";
 import styled from 'styled-components';
 import { useEffect, useState, React } from "react";
 import { useNavigate } from 'react-router-dom';
+import axios from "axios";
 
 function LevelTree() {
   const StyledNode = styled.div`
@@ -19,31 +20,53 @@ function LevelTree() {
 
   const getAllUsers = async () => {
     try {
-      const referralId = user.referralCode
-      const response = await fetch(base_url + 'users/referrals/' + referralId, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-      });
-      const data = await response.json();
-      if (response.ok) {
-        let rootData = JSON.parse(JSON.stringify(data.users[0]));
-        delete rootData['reportingHierarchy'];
-        data.users[0].reportingHierarchy.unshift(rootData)
-        let link = 'referredBy';
-        let referralCode = rootData.referredBy;
-        let items = data.users[0].reportingHierarchy
-        items = items
-          .filter(item => item[link] === referralCode)
-          .map(item => ({ ...item, children: nest(items, item.referralCode) }));
+      const referralId = user.referralCode;
+      axios
+        .get(base_url + "users/referrals/" + referralId)
+        .then((response) => {
+          let rootData = JSON.parse(JSON.stringify(response.data.users[0]));
+          delete rootData["reportingHierarchy"];
+          response.data.users[0].reportingHierarchy.unshift(rootData);
+          let link = "referredBy";
+          let referralCode = rootData.referredBy;
+          let items = response.data.users[0].reportingHierarchy;
+          items = items
+            .filter((item) => item[link] === referralCode)
+            .map((item) => ({
+              ...item,
+              children: nest(items, item.referralCode),
+            }));
 
-        setUsers(items);
-      } else {
-        console.log(data.message);
-      }
+          setUsers(items);
+        })
+        .catch((error) => {
+          console.log(error.message);
+        });
+
+      // const response = await fetch(base_url + 'users/referrals/' + referralId, {
+      //   method: 'GET',
+      //   headers: {
+      //     'Content-Type': 'application/json'
+      //   },
+      // });
+      // const data = await response.json();
+      // if (response.ok) {
+      //   let rootData = JSON.parse(JSON.stringify(data.users[0]));
+      //   delete rootData['reportingHierarchy'];
+      //   data.users[0].reportingHierarchy.unshift(rootData)
+      //   let link = 'referredBy';
+      //   let referralCode = rootData.referredBy;
+      //   let items = data.users[0].reportingHierarchy
+      //   items = items
+      //     .filter(item => item[link] === referralCode)
+      //     .map(item => ({ ...item, children: nest(items, item.referralCode) }));
+
+      //   setUsers(items);
+      // } else {
+      //   console.log(data.message);
+      // }
     } catch (error) {
-      console.log('An error occurred. Please try again.');
+      console.log("An error occurred. Please try again.");
     }
   }
 
@@ -57,25 +80,39 @@ function LevelTree() {
       const logout = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(base_url + 'users/logout', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+          axios
+            .post(base_url + "users/logout")
+            .then((response) => {
+              localStorage.removeItem("token");
+              localStorage.removeItem("user");
+              navigate("/login");
+            })
+            .catch((error) => {
+              localStorage.removeItem("token");
+              localStorage.removeItem("user");
+              setError(error.message);
+              navigate("/login");
             });
-            const data = await response.json();
-            if (response.ok) {
-                localStorage.removeItem('token');
-                localStorage.removeItem('user');
-                navigate('/login');
-            } else {
-                setError(data.message);
-            }
+
+          // const response = await fetch(base_url + 'users/logout', {
+          //     method: 'POST',
+          //     headers: {
+          //         'Content-Type': 'application/json'
+          //     },
+          // });
+          // const data = await response.json();
+          // if (response.ok) {
+          //     localStorage.removeItem('token');
+          //     localStorage.removeItem('user');
+          //     navigate('/login');
+          // } else {
+          //     setError(data.message);
+          // }
         } catch (error) {
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            navigate('/login');
-            setError('An error occurred. Please try again.');
+          localStorage.removeItem("token");
+          localStorage.removeItem("user");
+          navigate("/login");
+          setError("An error occurred. Please try again.");
         }
     };
 

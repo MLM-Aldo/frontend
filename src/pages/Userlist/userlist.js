@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 
@@ -13,41 +14,62 @@ function Users() {
 
     const getAllUsers = async () => {
         try {
-            const response = await fetch(base_url + 'users/allUsers', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'authorization': 'Bearer ' +token
-                },
+          axios
+            .get(base_url + "users/allUsers")
+            .then((response) => {
+              setUsers(response.data.users);
+            })
+            .catch((error) => {
+              setError(error.message);
             });
-            const data = await response.json();
-            if (response.ok) {
-                setUsers(data.users);
-            } else {
-                setError(data.message);
-            }
+          // const response = await fetch(base_url + 'users/allUsers', {
+          //     method: 'GET',
+          //     headers: {
+          //         'Content-Type': 'application/json',
+          //         'authorization': 'Bearer ' +token
+          //     },
+          // });
+          // const data = await response.json();
+          // if (response.ok) {
+          //     setUsers(data.users);
+          // } else {
+          //     setError(data.message);
+          // }
         } catch (error) {
-            setError('An error occurred. Please try again.');
+          setError("An error occurred. Please try again.");
         }
     }
 
     const logout = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(base_url + 'users/logout', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-            });
-            const data = await response.json();
-            if (response.ok) {
-                localStorage.removeItem('token');
-                localStorage.removeItem('user');
-                navigate('/login');
-            } else {
-                setError(data.message);
-            }
+          axios
+            .post(base_url + "users/logout", null)
+            .then((response) => {
+                localStorage.removeItem("token");
+                localStorage.removeItem("user");
+                navigate("/login");
+              })
+              .catch((error) => {
+                localStorage.removeItem("token");
+                localStorage.removeItem("user");
+                setError(error.message);
+                navigate("/login");
+              });
+          // const response = await fetch(base_url + 'users/logout', {
+          //     method: 'POST',
+          //     headers: {
+          //         'Content-Type': 'application/json'
+          //     },
+          // });
+          // const data = await response.json();
+          // if (response.ok) {
+          //     localStorage.removeItem('token');
+          //     localStorage.removeItem('user');
+          //     navigate('/login');
+          // } else {
+          //     setError(data.message);
+          // }
         } catch (error) {
             localStorage.removeItem('token');
             localStorage.removeItem('user');
@@ -65,9 +87,7 @@ function Users() {
 
     }
     return (
-
         <div id="layout-wrapper">
-
             <header id="page-topbar">
                 <div className="layout-width">
                     <div className="navbar-header">

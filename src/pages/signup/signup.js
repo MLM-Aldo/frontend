@@ -35,22 +35,34 @@ function Signup() {
     const signupUser = async (e) => {
         e.preventDefault();
         try {
-          const response = await fetch(base_url +'users/register', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ username, password, email, phone,referredBy })
-          });
-          const data = await response.json();
-          if (response.ok) {
-            // localStorage.setItem('token', data.token);
-            navigate('/login');
-          } else {
-            setError(data.message);
-          }
+          axios
+            .post(
+              base_url + "users/register",
+              JSON.stringify({ username, password, email, phone, referredBy })
+            )
+            .then((response) => {
+              navigate("/login");
+            })
+            .catch((error) => {
+              setError(error.message);
+            });
+
+          //   const response = await fetch(base_url +'users/register', {
+          //     method: 'POST',
+          //     headers: {
+          //       'Content-Type': 'application/json'
+          //     },
+          //     body: JSON.stringify({ username, password, email, phone,referredBy })
+          //   });
+          //   const data = await response.json();
+          //   if (response.ok) {
+          //     // localStorage.setItem('token', data.token);
+          //     navigate('/login');
+          //   } else {
+          //     setError(data.message);
+          //   }
         } catch (error) {
-          setError('An error occurred. Please try again.');
+          setError("An error occurred. Please try again.");
         }
       };
 
