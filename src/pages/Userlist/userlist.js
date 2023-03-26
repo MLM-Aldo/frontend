@@ -7,6 +7,8 @@ function Users() {
     const [error, setError] = useState('');
     const [users, setUsers] = useState([]);
 
+    const user_info = JSON.parse(localStorage.getItem('user'));
+
     const getAllUsers = async() => {
         try {
             const response = await fetch(base_url + 'users/allUsers', {
@@ -119,7 +121,7 @@ function Users() {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div className="d-flex align-items-center">
+                                                {/* <div className="d-flex align-items-center">
                                                     <div className="avatar-sm flex-shrink-0">
                                                         <span className="avatar-title bg-soft-info rounded fs-3">
                                                             <i className="bx bx-wallet text-info"></i>
@@ -131,6 +133,21 @@ function Users() {
                                                 </div>
                                                 <div className="mt-4 pt-1">
                                                     <h4 className="fs-22 fw-semibold ff-secondary mb-0">Rs<span className="counter-value" data-target="62.564"></span> </h4>
+                                                </div> */}
+
+
+                                                <div className="d-flex align-items-center">
+                                                    <div className="avatar-sm flex-shrink-0">
+                                                        <span className="avatar-title bg-soft-info rounded fs-3">
+                                                            <i className="bx bx-wallet text-info"></i>
+                                                        </span>
+                                                    </div>
+                                                    <div className="flex-grow-1 ps-3">
+                                                        <h5 className="text-muted text-uppercase fs-13 mb-0">Referral Code</h5>
+                                                    </div>
+                                                </div>
+                                                <div className="mt-4 pt-1">
+                                                    <h4 className="fs-22 fw-semibold ff-secondary mb-0">Referral Code: <span className="counter-value" data-target={user_info.referralCode}>{user_info.referralCode}</span> </h4>
                                                 </div>
                                             </div>
                                         </div>
