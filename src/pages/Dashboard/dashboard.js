@@ -10,6 +10,7 @@ function Dashboard() {
     const base_url = process.env.REACT_APP_API_URL;
 
     const user = JSON.parse(localStorage.getItem('user'));
+    const token = localStorage.getItem('token');
 
     useEffect(()=>{
         let token = localStorage.getItem('token');
@@ -24,7 +25,8 @@ function Dashboard() {
             const response = await fetch(base_url + 'users/logout', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'authorization': 'Bearer ' +token
                 },
             });
             const data = await response.json();

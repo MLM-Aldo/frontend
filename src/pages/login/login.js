@@ -10,6 +10,7 @@ function Login() {
     const [error, setError] = useState('');
     const navigate = useNavigate();
     const base_url = process.env.REACT_APP_API_URL;
+    const token = localStorage.getItem('token');
 
     useEffect(()=>{
         let token = localStorage.getItem('token');
@@ -32,7 +33,7 @@ function Login() {
           const data = await response.json();
           if (response.ok) {
             localStorage.setItem('user', JSON.stringify(data.user));
-            localStorage.setItem('token', data.user._id);
+            localStorage.setItem('token', data.token);
             navigate('/dashboard');
           } else {
             setError(data.message);

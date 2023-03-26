@@ -6,6 +6,7 @@ function Users() {
     const base_url = process.env.REACT_APP_API_URL;
     const [error, setError] = useState('');
     const [users, setUsers] = useState([]);
+    const token = localStorage.getItem('token');
 
     const user_info = JSON.parse(localStorage.getItem('user'));
 
@@ -14,7 +15,8 @@ function Users() {
             const response = await fetch(base_url + 'users/allUsers', {
                 method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'authorization': 'Bearer ' +token
                 },
             });
             const data = await response.json();
