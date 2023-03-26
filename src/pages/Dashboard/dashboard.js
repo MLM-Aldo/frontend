@@ -9,6 +9,8 @@ function Dashboard() {
     const navigate = useNavigate();
     const base_url = process.env.REACT_APP_API_URL;
 
+    const user = JSON.parse(localStorage.getItem('user'));
+
     useEffect(()=>{
         let token = localStorage.getItem('token');
         if(!token) {
@@ -261,14 +263,14 @@ function Dashboard() {
                                     <span className="d-flex align-items-center">
                                         <img className="rounded-circle header-profile-user" src="assets/images/users/avatar-1.jpg" alt="Header Avatar" />
                                         <span className="text-start ms-xl-2">
-                                            <span className="d-none d-xl-inline-block ms-1 fw-medium user-name-text">S</span>
-                                            <span className="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text">Admin</span>
+                                            {/* <span className="d-none d-xl-inline-block ms-1 fw-medium user-name-text">S</span> */}
+                                            <span className="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text">{user.username}</span>
                                         </span>
                                     </span>
                                 </button>
                                 <div className="dropdown-menu dropdown-menu-end">
 
-                                    <h6 className="dropdown-header">Welcome Admin!</h6>
+                                    <h6 className="dropdown-header">Welcome {user.username}!</h6>
                                     <a className="dropdown-item" href=""><i className="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span className="align-middle">Profile</span></a>
                                     <div className="dropdown-divider"></div>
                                     <a className="dropdown-item" href=""><i className="mdi mdi-wallet text-muted fs-16 align-middle me-1"></i> <span className="align-middle">Balance : <b>Rs 5971.67</b></span></a>
