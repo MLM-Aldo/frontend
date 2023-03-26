@@ -28,11 +28,15 @@ function Dashboard() {
             const data = await response.json();
             if (response.ok) {
                 localStorage.removeItem('token');
+                localStorage.removeItem('user');
                 navigate('/login');
             } else {
                 setError(data.message);
             }
         } catch (error) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            navigate('/login');
             setError('An error occurred. Please try again.');
         }
     };
