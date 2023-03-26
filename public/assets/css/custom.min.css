@@ -1,2 +1,18 @@
 
 /*# sourceMappingURL=custom.min.css.map */
+.navbar-menu{
+    background: #032631;
+}
+.navbar-menu .navbar-nav .nav-link{
+    color: #fff;
+}
+.navbar-menu .navbar-nav .nav-link[data-bs-toggle=collapse][aria-expanded=true]{
+    color: #f9f9f9;
+}
+.navbar-brand-box{
+    border-bottom: 1px solid #8b8b8b;
+}
+#page-topbar{
+    background: #096f94;
+}
+

@@ -50,39 +50,10 @@ function Dashboard() {
             <header id="page-topbar">
                 <div className="layout-width">
                     <div className="navbar-header">
-                        <div className="d-flex">
-                            <div className="navbar-brand-box horizontal-logo">
-                                <a href="/" className="logo logo-dark">
-                                    <span className="logo-sm">
-                                        <img src="assets/images/logo.png" alt="" height="22" />
-                                    </span>
-                                    <span className="logo-lg">
-                                        <img src="assets/images/logo.png" alt="" height="17" />
-                                    </span>
-                                </a>
-
-                                <a href="/" className="logo logo-light">
-                                    <span className="logo-sm">
-                                        <img src="assets/images/logo.png" alt="" height="22" />
-                                    </span>
-                                    <span className="logo-lg">
-                                        <img src="assets/images/logo.png" alt="" height="17" />
-                                    </span>
-                                </a>
-                            </div>
-
-                            <button type="button" className="btn btn-sm px-3 fs-16 header-item vertical-menu-btn topnav-hamburger" id="topnav-hamburger-icon">
-                                <span className="hamburger-icon">
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                </span>
-                            </button>
-                            
+                        <div className="d-flex">     
                         </div>
 
                         <div className="d-flex align-items-center">
-
                             <div className="dropdown d-md-none topbar-head-dropdown header-item">
                                 <button type="button" className="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" id="page-header-search-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i className="bx bx-search fs-22"></i>
@@ -127,29 +98,6 @@ function Dashboard() {
                 </div>
             </header>
 
-            <div id="removeNotificationModal" className="modal fade zoomIn" tabIndex="-1" aria-hidden="true">
-                <div className="modal-dialog modal-dialog-centered">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" id="NotificationModalbtn-close"></button>
-                        </div>
-                        <div className="modal-body">
-                            <div className="mt-2 text-center">
-                                <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop" colors="primary:#f7b84b,secondary:#f06548" style={{ width: "100px", height: "100px" }}></lord-icon>
-                                <div className="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
-                                    <h4>Are you sure ?</h4>
-                                    <p className="text-muted mx-4 mb-0">Are you sure you want to remove this Notification ?</p>
-                                </div>
-                            </div>
-                            <div className="d-flex gap-2 justify-content-center mt-4 mb-2">
-                                <button type="button" className="btn w-sm btn-light" data-bs-dismiss="modal">Close</button>
-                                <button type="button" className="btn w-sm btn-danger" id="delete-notification">Yes, Delete It!</button>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
 
             <div className="app-menu navbar-menu">
                 {/* <!-- LOGO --> */}
@@ -160,16 +108,16 @@ function Dashboard() {
                             <img src="assets/images/logo.png" alt="" height="22" />
                         </span>
                         <span className="logo-lg">
-                            <img src="assets/images/logo.png" alt="" height="17" />
+                            <img src="assets/images/logo.png" alt="" height="66" />
                         </span>
                     </a>
                     {/* <!-- Light Logo--> */}
                     <a href="index.html" className="logo logo-light">
                         <span className="logo-sm">
-                            <img src="assets/images/logo.png" alt="" height="80" />
+                            <img src="assets/images/logo.png" alt="" height="22" />
                         </span>
                         <span className="logo-lg">
-                            <img src="assets/images/logo.png" alt="" height="80" />
+                            <img src="assets/images/logo.png" alt="" height="66" />
                         </span>
                     </a>
                     <button type="button" className="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover" id="vertical-hover">
@@ -194,13 +142,7 @@ function Dashboard() {
                                             <a href="" className="nav-link" data-key="t-analytics"> Wallet Balance </a>
                                         </li>
                                         <li className="nav-item">
-                                            <a href="" className="nav-link" data-key="t-crm"> Pending Funds </a>
-                                        </li>
-                                        <li className="nav-item">
                                             <a href="" className="nav-link" data-key="t-ecommerce"> Transfer Funds </a>
-                                        </li>
-                                        <li className="nav-item">
-                                            <a href="" className="nav-link" data-key="t-crypto"> Manage Funds</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -216,11 +158,20 @@ function Dashboard() {
                                             <a href="" className="nav-link" data-key="t-calendar"> Reffered Lists </a>
                                         </li>
                                         <li className="nav-item">
-                                            <a href="" className="nav-link" data-key="t-chat"> Downline Tree </a>
+                                            <a href="/leveltree" className="nav-link" data-key="t-chat"> Downline Tree </a>
                                         </li>
                                     </ul>
                                 </div>
                             </li>
+                            {
+                                user.isAdmin ?
+                                <li className="nav-item" >
+                                 <a href="/users" className="nav-link menu-link"><i className=" ri-contacts-fill"></i>Users</a>
+                            </li>
+                                :
+                                <></>
+                            }
+                            
 
 
                         </ul>
@@ -237,12 +188,9 @@ function Dashboard() {
             <div className="main-content">
 
                 <div className="page-content">
-                    <Users></Users>
+                    
                 </div>
-
-                <div className="page-content">
-                    <LevelTree></LevelTree>
-                </div>
+                
                 <footer className="footer">
                     <div className="container-fluid">
                         <div className="row">
@@ -251,7 +199,7 @@ function Dashboard() {
                             </div>
                             <div className="col-sm-6">
                                 <div className="text-sm-end d-none d-sm-block">
-                                    Design & Develop by Shree
+                                    Design & Develop by Digiphins
                                 </div>
                             </div>
                         </div>
