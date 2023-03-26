@@ -291,7 +291,7 @@ function LevelTree() {
                 >
                   <ul className="nav nav-sm flex-column">
                     <li className="nav-item">
-                      <a href="" className="nav-link" data-key="t-analytics">
+                      <a href="/dashboard" className="nav-link" data-key="t-analytics">
                         {" "}
                         Wallet Balance{" "}
                       </a>
