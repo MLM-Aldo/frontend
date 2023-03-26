@@ -9,6 +9,7 @@ function Dashboard() {
     const [error, setError] = useState('');
     const navigate = useNavigate();
     const base_url = process.env.REACT_APP_API_URL;
+    const [refferalBonus,setRefferalBonus] = useState(0);
 
     const user = JSON.parse(localStorage.getItem('user'));
     const token = localStorage.getItem('token');
@@ -18,6 +19,15 @@ function Dashboard() {
         if(!token) {
             navigate('/login');
         }
+
+        axios
+          .get(base_url + "referrals/referralBonus/" + user.referralCode)
+          .then((response) => {
+            setRefferalBonus(response.data.referralAmount);
+          })
+          .catch((error) => {
+            setError(error.message);
+          });
     },[])
 
     const logout = async (e) => {
@@ -36,6 +46,7 @@ function Dashboard() {
               setError(error.message);
               navigate("/login");
             });
+            
 
             // const response = await fetch(base_url + 'users/logout', {
             //     method: 'POST',
@@ -377,7 +388,7 @@ function Dashboard() {
                                                 </div>
                                                 <div class="d-flex align-items-end justify-content-between mt-4">
                                                     <div>
-                                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4">$<span class="counter-value" data-target="">0</span>k </h4>
+                                                        <h4 class="fs-22 fw-semibold ff-secondary mb-4"><span class="counter-value" data-target="">{refferalBonus}</span> </h4>
                                                         <a href="" class="text-decoration-underline">Withdraw money</a>
                                                     </div>
                                                     <div class="avatar-sm flex-shrink-0">
