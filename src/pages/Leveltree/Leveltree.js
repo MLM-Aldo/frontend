@@ -202,7 +202,7 @@ function LevelTree() {
                   <h6 className="dropdown-header">
                     Welcome {user.username}!
                   </h6>
-                  <a className="dropdown-item" href="">
+                  <a className="dropdown-item" href="/userprofile">
                     <i className="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i>{" "}
                     <span className="align-middle">Profile</span>
                   </a>
