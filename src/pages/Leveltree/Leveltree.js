@@ -1,8 +1,9 @@
-import { Tree, TreeNode } from "react-organizational-chart";
+// import { Tree, TreeNode } from "react-organizational-chart";
 import styled from 'styled-components';
 import { useEffect, useState, React } from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
+import Tree from 'react-d3-tree';
 
 function LevelTree() {
   const StyledNode = styled.div`
@@ -16,7 +17,6 @@ function LevelTree() {
   const base_url = process.env.REACT_APP_API_URL;
   const user = JSON.parse(localStorage.getItem('user'))
   const [error, setError] = useState('');
-
 
   const getAllUsers = async () => {
     try {
@@ -120,17 +120,25 @@ function LevelTree() {
     getAllUsers();
   }, []);
 
-  const renderTreeNodes = (nodes) => {
-    return (
-      nodes &&
-      nodes.map((node) => (
-        <TreeNode label={<StyledNode>{node.username}</StyledNode>}>
-          {renderTreeNodes(node.children)}
-        </TreeNode>
-      ))
-    );
-  };
+  const MyNodeComponent = ({ nodeData }) => (
+    <g>
+      <circle r={10} fill="#fff" stroke="#000" strokeWidth={1} />
+      <text x="-25" y="25" style={{ fontSize: '12px' }}>
+        {nodeData.username}
+      </text>
+    </g>
+  );
 
+  // const renderTreeNodes = (nodes) => {
+  //   return (
+  //     nodes &&
+  //     nodes.map((node) => (
+  //       <TreeNode label={<StyledNode>{node.username}</StyledNode>}>
+  //         {renderTreeNodes(node.children)}
+  //       </TreeNode>
+  //     ))
+  //   );
+  // };
 
 
   return (
@@ -369,16 +377,21 @@ function LevelTree() {
                     </div>
                     {/* <!-- end card header --> */}
 
-                    <div className="card-body">
+                    <div className="card-body" style={{height: "800px"}}>
                       {users.length > 0 && users[0].children &&
+                        // <Tree
+                        //   lineWidth={"2px"}
+                        //   lineColor={"green"}
+                        //   lineBorderRadius={"10px"}
+                        //   label={<StyledNode>{users[0].username}</StyledNode>}
+                        // >
+                        //   {renderTreeNodes(users[0].children)}
+                        // </Tree>
                         <Tree
-                          lineWidth={"2px"}
-                          lineColor={"green"}
-                          lineBorderRadius={"10px"}
-                          label={<StyledNode>{users[0].username}</StyledNode>}
-                        >
-                          {renderTreeNodes(users[0].children)}
-                        </Tree>}
+                            data={users}
+                            nodeSvgShape={{ shape: 'circle', shapeProps: { r: 10, fill: '#fff', stroke: '#000', strokeWidth: 1 } }}
+                            nodeLabelComponent={{ render: <MyNodeComponent /> }}
+                          />}
                     </div>
                   </div>
                 </div>
