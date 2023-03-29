@@ -140,7 +140,7 @@ function Dashboard() {
                     <h6 className="dropdown-header">
                       Welcome {user.username}!
                     </h6>
-                    <a className="dropdown-item" href="">
+                    <a className="dropdown-item" href="/userprofile">
                       <i className="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i>{" "}
                       <span className="align-middle">Profile</span>
                     </a>
@@ -229,7 +229,7 @@ function Dashboard() {
                   >
                     <ul className="nav nav-sm flex-column">
                       <li className="nav-item">
-                        <a href="" className="nav-link" data-key="t-analytics">
+                        <a href="/dashboard" className="nav-link" data-key="t-analytics">
                           {" "}
                           Wallet Balance{" "}
                         </a>

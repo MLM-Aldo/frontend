@@ -1,8 +1,9 @@
-import { Tree, TreeNode } from "react-organizational-chart";
+// import { Tree, TreeNode } from "react-organizational-chart";
 import styled from 'styled-components';
 import { useEffect, useState, React } from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
+import Tree from 'react-d3-tree';
 
 function LevelTree() {
   const StyledNode = styled.div`
@@ -17,6 +18,17 @@ function LevelTree() {
   const user = JSON.parse(localStorage.getItem('user'))
   const [error, setError] = useState('');
 
+  const containerStyles = {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100vh',
+  };
+
+  const svgStyles = {
+    height: 500,
+    width: '100%',
+  };
 
   const getAllUsers = async () => {
     try {
@@ -24,6 +36,15 @@ function LevelTree() {
       axios
         .get(base_url + "users/referrals/" + referralId)
         .then((response) => {
+          response.data.users[0].name =  response.data.users[0].username
+          response.data.users[0].username =  undefined
+          response.data.users[0].reportingHierarchy = response.data.users[0].reportingHierarchy.map(user => {
+            return {
+              ...user,
+              name: user.username,
+              username: undefined
+            };
+          });
           let rootData = JSON.parse(JSON.stringify(response.data.users[0]));
           delete rootData["reportingHierarchy"];
           response.data.users[0].reportingHierarchy.unshift(rootData);
@@ -120,17 +141,28 @@ function LevelTree() {
     getAllUsers();
   }, []);
 
-  const renderTreeNodes = (nodes) => {
+  const MyNodeComponent = ({ nodeData }) => {
     return (
-      nodes &&
-      nodes.map((node) => (
-        <TreeNode label={<StyledNode>{node.username}</StyledNode>}>
-          {renderTreeNodes(node.children)}
-        </TreeNode>
-      ))
+      <g>
+        <circle r={10} fill="#fff" stroke="#000" strokeWidth={1} />
+        <text x="-25" y="25" style={{ fontSize: '12px' }}>
+          {nodeData.username}
+        </text>
+      </g>
     );
   };
+  
 
+  // const renderTreeNodes = (nodes) => {
+  //   return (
+  //     nodes &&
+  //     nodes.map((node) => (
+  //       <TreeNode label={<StyledNode>{node.username}</StyledNode>}>
+  //         {renderTreeNodes(node.children)}
+  //       </TreeNode>
+  //     ))
+  //   );
+  // };
 
 
   return (
@@ -185,11 +217,7 @@ function LevelTree() {
                   aria-expanded="false"
                 >
                   <span className="d-flex align-items-center">
-                    <img
-                      className="rounded-circle header-profile-user"
-                      src="assets/images/users/avatar-1.jpg"
-                      alt="Header Avatar"
-                    />
+                  <i className="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i>
                     <span className="text-start ms-xl-2">
                       {/* <span className="d-none d-xl-inline-block ms-1 fw-medium user-name-text">S</span> */}
                       <span className="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text">
@@ -202,7 +230,7 @@ function LevelTree() {
                   <h6 className="dropdown-header">
                     Welcome {user.username}!
                   </h6>
-                  <a className="dropdown-item" href="">
+                  <a className="dropdown-item" href="/userprofile">
                     <i className="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i>{" "}
                     <span className="align-middle">Profile</span>
                   </a>
@@ -291,7 +319,7 @@ function LevelTree() {
                 >
                   <ul className="nav nav-sm flex-column">
                     <li className="nav-item">
-                      <a href="" className="nav-link" data-key="t-analytics">
+                      <a href="/dashboard" className="nav-link" data-key="t-analytics">
                         {" "}
                         Wallet Balance{" "}
                       </a>
@@ -369,16 +397,21 @@ function LevelTree() {
                     </div>
                     {/* <!-- end card header --> */}
 
-                    <div className="card-body">
+                    <div className="card-body" style={{height: "800px", display: 'flex', justifyContent: 'center'}}>
                       {users.length > 0 && users[0].children &&
                         <Tree
-                          lineWidth={"2px"}
-                          lineColor={"green"}
-                          lineBorderRadius={"10px"}
-                          label={<StyledNode>{users[0].username}</StyledNode>}
-                        >
-                          {renderTreeNodes(users[0].children)}
-                        </Tree>}
+                        data={users}
+                        nodeSvgShape={{
+                          shape: 'circle',
+                          shapeProps: { r: 10, fill: '#fff', stroke: '#000', strokeWidth: 1 },
+                        }}
+                        nodeLabelComponent={{
+                          render: <MyNodeComponent />,
+                          foreignObjectWrapper: {
+                            y: 30,
+                          },
+                        }}
+                      />}
                     </div>
                   </div>
                 </div>
