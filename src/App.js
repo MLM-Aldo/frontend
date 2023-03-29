@@ -5,7 +5,9 @@ import Login from './pages/login/login';
 import Signup from './pages/signup/signup';
 import Users from './pages/Userlist/userlist';
 import UserProfile from './pages/userprofile/userprofile';
-import UserSettings from './pages/usersetting/usersetting'
+import UserSettings from './pages/usersetting/usersetting';
+import BlockedUsers from './pages/blockeduser/blockeduser';
+
 
 function App() {
   return (
@@ -17,7 +19,7 @@ function App() {
           <Route path="/users" element={<Users />} />          
           <Route path="/leveltree" element={<LevelTree />} />          
           <Route path="/userprofile" element={<UserProfile />} />    
-          <Route path="/usersetting" element={<UserSettings />} />
+          <Route path="/blockeduser" element={<BlockedUsers />} />
 
           <Route path="/" element={<Login />}>
         </Route>
