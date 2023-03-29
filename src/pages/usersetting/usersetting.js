@@ -2,6 +2,9 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 function UserSettings() {
 
   const base_url = process.env.REACT_APP_API_URL;
@@ -11,6 +14,26 @@ function UserSettings() {
   const navigate = useNavigate();
 
   const user = JSON.parse(localStorage.getItem('user'));
+
+  const [firstName, setFirstName] = useState(user.username);
+  const [phone, setPhone] = useState(user.phone);
+
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPasword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [notify, setNotify] = useState("");
+
+  const changePassword = () =>{
+    axios
+      .put(base_url + "users/"+ user._id + '/password', {
+        "oldPassword": oldPassword,
+        "newPassword": newPasword
+      })
+      .then((response) => {
+        setNotify(toast("Wow so easy!"))
+      }).catch((error) => {
+      });
+  }
 
   const getAllUsers = async () => {
     try {
@@ -38,6 +61,22 @@ function UserSettings() {
     } catch (error) {
       setError("An error occurred. Please try again.");
     }
+  }
+
+  const profileUpdate =() =>{
+    axios
+      .put(base_url + "users/"+ user._id, {
+        "username": firstName,
+        "email": user.email,
+        "phone": phone
+      })
+      .then((response) => {
+        user.username = firstName;
+        user.phone = phone;
+        localStorage.setItem('user', JSON.stringify(user));
+        navigate("/userprofile");
+      }).catch((error) => {
+      });
   }
 
   const logout = async (e) => {
@@ -369,20 +408,24 @@ function UserSettings() {
                                                     <div class="col-lg-6">
                                                         <div class="mb-3">
                                                             <label for="firstnameInput" class="form-label">Full Name</label>
-                                                            <input type="text" class="form-control" id="firstnameInput" placeholder="Enter your firstname" value="{user.username}" />
+                                                            <input type="text" class="form-control" id="firstnameInput" placeholder="Enter your firstname"
+                                                              onChange={(event)=>setFirstName(event.target.value)}
+                                                             value={firstName} />
                                                         </div>
                                                     </div>
                                                     {/* <!--end col--> */}
                                                     <div class="col-lg-6">
                                                         <div class="mb-3">
                                                             <label for="phonenumberInput" class="form-label">Phone Number</label>
-                                                            <input type="text" class="form-control" id="phonenumberInput" placeholder="Enter your phone number" value="{user.phone}" />
+                                                            <input type="text" class="form-control" id="phonenumberInput" placeholder="Enter your phone number" 
+                                                            onChange={(event)=>setPhone(event.target.value)}
+                                                            value={phone} />
                                                         </div>
                                                     </div>
                                                     {/* <!--end col--> */}
                                                     <div class="col-lg-12">
                                                         <div class="hstack gap-2 justify-content-end">
-                                                            <button type="submit" class="btn btn-primary">Update</button>
+                                                            <button type="submit" class="btn btn-primary" onClick={profileUpdate}>Update</button>
                                                             <button type="button" class="btn btn-soft-success">Cancel</button>
                                                         </div>
                                                     </div>
@@ -398,21 +441,24 @@ function UserSettings() {
                                                     <div class="col-lg-4">
                                                         <div>
                                                             <label for="oldpasswordInput" class="form-label">Old Password*</label>
-                                                            <input type="password" class="form-control" id="oldpasswordInput" placeholder="Enter current password" />
+                                                            <input type="password" class="form-control" id="oldpasswordInput" placeholder="Enter current password" 
+                                                            value={oldPassword} onChange={(event)=>{setOldPassword(event.target.value)}}/>
                                                         </div>
                                                     </div>
                                                     {/* <!--end col--> */}
                                                     <div class="col-lg-4">
                                                         <div>
                                                             <label for="newpasswordInput" class="form-label">New Password*</label>
-                                                            <input type="password" class="form-control" id="newpasswordInput" placeholder="Enter new password" />
+                                                            <input type="password" class="form-control" id="newpasswordInput" 
+                                                            placeholder="Enter new password"  value={newPasword} onChange={(event)=>{setNewPassword(event.target.value)}}/>
                                                         </div>
                                                     </div>
                                                     {/* <!--end col--> */}
                                                     <div class="col-lg-4">
                                                         <div>
                                                             <label for="confirmpasswordInput" class="form-label">Confirm Password*</label>
-                                                            <input type="password" class="form-control" id="confirmpasswordInput" placeholder="Confirm password" />
+                                                            <input type="password" class="form-control" id="confirmpasswordInput" placeholder="Confirm password" 
+                                                            value={confirmPassword} onChange={(event)=>{setConfirmPassword(event.target.value)}}/>
                                                         </div>
                                                     </div>
                                                     {/* <!--end col--> */}
@@ -424,7 +470,7 @@ function UserSettings() {
                                                     {/* <!--end col--> */}
                                                     <div class="col-lg-12">
                                                         <div class="text-end">
-                                                            <button type="submit" class="btn btn-success">Change Password</button>
+                                                            <button type="submit" class="btn btn-success" onClick={changePassword}>Change Password</button>
                                                         </div>
                                                     </div>
                                                     {/* <!--end col--> */}
@@ -458,6 +504,7 @@ function UserSettings() {
               </div>
             </div>
           </footer>
+          <ToastContainer />
         </div>
       </div>
     </div>
