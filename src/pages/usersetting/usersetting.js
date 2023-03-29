@@ -30,7 +30,10 @@ function UserSettings() {
         "newPassword": newPasword
       })
       .then((response) => {
-        setNotify(toast("Wow so easy!"))
+        setNewPassword("")
+        setOldPassword("")
+        setConfirmPassword("")
+        setNotify(toast("Password updated successfully!"))
       }).catch((error) => {
       });
   }
