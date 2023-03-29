@@ -18,12 +18,33 @@ function LevelTree() {
   const user = JSON.parse(localStorage.getItem('user'))
   const [error, setError] = useState('');
 
+  const containerStyles = {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100vh',
+  };
+
+  const svgStyles = {
+    height: 500,
+    width: '100%',
+  };
+
   const getAllUsers = async () => {
     try {
       const referralId = user.referralCode;
       axios
         .get(base_url + "users/referrals/" + referralId)
         .then((response) => {
+          response.data.users[0].name =  response.data.users[0].username
+          response.data.users[0].username =  undefined
+          response.data.users[0].reportingHierarchy = response.data.users[0].reportingHierarchy.map(user => {
+            return {
+              ...user,
+              name: user.username,
+              username: undefined
+            };
+          });
           let rootData = JSON.parse(JSON.stringify(response.data.users[0]));
           delete rootData["reportingHierarchy"];
           response.data.users[0].reportingHierarchy.unshift(rootData);
@@ -120,14 +141,17 @@ function LevelTree() {
     getAllUsers();
   }, []);
 
-  const MyNodeComponent = ({ nodeData }) => (
-    <g>
-      <circle r={10} fill="#fff" stroke="#000" strokeWidth={1} />
-      <text x="-25" y="25" style={{ fontSize: '12px' }}>
-        {nodeData.username}
-      </text>
-    </g>
-  );
+  const MyNodeComponent = ({ nodeData }) => {
+    return (
+      <g>
+        <circle r={10} fill="#fff" stroke="#000" strokeWidth={1} />
+        <text x="-25" y="25" style={{ fontSize: '12px' }}>
+          {nodeData.username}
+        </text>
+      </g>
+    );
+  };
+  
 
   // const renderTreeNodes = (nodes) => {
   //   return (
@@ -377,21 +401,21 @@ function LevelTree() {
                     </div>
                     {/* <!-- end card header --> */}
 
-                    <div className="card-body" style={{height: "800px"}}>
+                    <div className="card-body" style={{height: "800px", display: 'flex', justifyContent: 'center'}}>
                       {users.length > 0 && users[0].children &&
-                        // <Tree
-                        //   lineWidth={"2px"}
-                        //   lineColor={"green"}
-                        //   lineBorderRadius={"10px"}
-                        //   label={<StyledNode>{users[0].username}</StyledNode>}
-                        // >
-                        //   {renderTreeNodes(users[0].children)}
-                        // </Tree>
                         <Tree
-                            data={users}
-                            nodeSvgShape={{ shape: 'circle', shapeProps: { r: 10, fill: '#fff', stroke: '#000', strokeWidth: 1 } }}
-                            nodeLabelComponent={{ render: <MyNodeComponent /> }}
-                          />}
+                        data={users}
+                        nodeSvgShape={{
+                          shape: 'circle',
+                          shapeProps: { r: 10, fill: '#fff', stroke: '#000', strokeWidth: 1 },
+                        }}
+                        nodeLabelComponent={{
+                          render: <MyNodeComponent />,
+                          foreignObjectWrapper: {
+                            y: 30,
+                          },
+                        }}
+                      />}
                     </div>
                   </div>
                 </div>
