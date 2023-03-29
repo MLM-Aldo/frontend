@@ -26,7 +26,7 @@ function Login() {
             axios
               .post(
                 base_url + "users/login",
-                JSON.stringify({ username, password })
+                { username, password }
               )
               .then((response) => {
                 localStorage.setItem("user", JSON.stringify(response.data.user));
