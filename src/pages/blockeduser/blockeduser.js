@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import _ from 'lodash';
 
 function BlockedUsers() {
 
@@ -9,32 +10,39 @@ function BlockedUsers() {
     const [users, setUsers] = useState([]);
     const token = localStorage.getItem('token');
     const navigate = useNavigate();
+    const [fullUsers, setFullUsers] = useState();
 
     const user = JSON.parse(localStorage.getItem('user'));
+
+    const searchTerm = (term) => {
+      debugger;
+      if(term == "") {
+        setUsers(fullUsers);
+      }else {
+
+        const busers = [];
+        fullUsers.map((x) => {
+          if(_.includes(x.username, term) || _.includes(x.email, term)) {
+            busers.push(x)
+          }
+        });
+        setUsers(busers);
+      }
+      
+    };
 
     const getAllUsers = async () => {
         try {
           axios
             .get(base_url + "users/allUsers")
             .then((response) => {
-              setUsers(response.data.users);
+              setFullUsers(_.filter(response.data.users, {active: true}))
+              const busers = _.filter(response.data.users, {active: true})
+              setUsers(busers);
             })
             .catch((error) => {
               setError(error.message);
             });
-          // const response = await fetch(base_url + 'users/allUsers', {
-          //     method: 'GET',
-          //     headers: {
-          //         'Content-Type': 'application/json',
-          //         'authorization': 'Bearer ' +token
-          //     },
-          // });
-          // const data = await response.json();
-          // if (response.ok) {
-          //     setUsers(data.users);
-          // } else {
-          //     setError(data.message);
-          // }
         } catch (error) {
           setError("An error occurred. Please try again.");
         }
@@ -335,7 +343,7 @@ function BlockedUsers() {
                                                 <div className="col-sm">
                                                     <div className="d-flex justify-content-sm-end">
                                                         <div className="search-box ms-2">
-                                                            <input type="text" className="form-control search" placeholder="Search..." />
+                                                            <input type="text" className="form-control search" placeholder="Search..." onChange={(event)=>searchTerm(event.target.value)}/>
                                                             <i className="ri-search-line search-icon"></i>
                                                         </div>
                                                     </div>

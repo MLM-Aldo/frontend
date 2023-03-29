@@ -20,7 +20,7 @@ function App() {
           <Route path="/leveltree" element={<LevelTree />} />          
           <Route path="/userprofile" element={<UserProfile />} />    
           <Route path="/blockeduser" element={<BlockedUsers />} />
-
+          <Route path="/usersetting" element={<UserSettings />} />
           <Route path="/" element={<Login />}>
         </Route>
       </Routes>
