@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import _ from 'lodash';
 
 function Users() {
 
@@ -9,6 +10,7 @@ function Users() {
     const [users, setUsers] = useState([]);
     const token = localStorage.getItem('token');
     const navigate = useNavigate();
+    const [fullUsers, setFullUsers] = useState();
     const [refferalBonus,setRefferalBonus] = useState(0);
 
     const user = JSON.parse(localStorage.getItem('user'));
@@ -29,11 +31,29 @@ function Users() {
         });
   },[])
 
+  const searchTerm = (term) => {
+    debugger;
+    if(term == "") {
+      setUsers(fullUsers);
+    }else {
+
+      const users = [];
+      fullUsers.map((x) => {
+        if(_.includes(x.username, term) || _.includes(x.email, term)) {
+          users.push(x)
+        }
+      });
+      setUsers(users);
+    }
+    
+  };
+
     const getAllUsers = async () => {
         try {
           axios
             .get(base_url + "users/allUsers")
             .then((response) => {
+              setFullUsers((response.data.users))
               setUsers(response.data.users);
             })
             .catch((error) => {
@@ -380,7 +400,7 @@ function Users() {
                                                 <div className="col-sm">
                                                     <div className="d-flex justify-content-sm-end">
                                                         <div className="search-box ms-2">
-                                                            <input type="text" className="form-control search" placeholder="Search..." />
+                                                            <input type="text" className="form-control search" placeholder="Search..." onChange={(event)=>searchTerm(event.target.value)} />
                                                             <i className="ri-search-line search-icon"></i>
                                                         </div>
                                                     </div>
