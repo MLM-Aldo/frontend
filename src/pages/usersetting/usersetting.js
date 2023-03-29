@@ -12,6 +12,7 @@ function UserSettings() {
   const [users, setUsers] = useState([]);
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
+  const [refferalBonus,setRefferalBonus] = useState(0);
 
   const user = JSON.parse(localStorage.getItem('user'));
 
@@ -37,6 +38,22 @@ function UserSettings() {
       }).catch((error) => {
       });
   }
+
+  useEffect(()=>{
+    let token = localStorage.getItem('token');
+    if(!token) {
+        navigate('/login');
+    }
+
+    axios
+      .get(base_url + "referrals/referralBonus/" + user.referralCode)
+      .then((response) => {
+        setRefferalBonus(response.data.referralAmount);
+      })
+      .catch((error) => {
+        setError(error.message);
+      });
+},[])
 
   const getAllUsers = async () => {
     try {
@@ -200,13 +217,13 @@ function UserSettings() {
                       <span className="align-middle">Profile</span>
                     </a>
                     <div className="dropdown-divider"></div>
-                    <a className="dropdown-item" href="">
+                    <a className="dropdown-item" href="/dashboard">
                       <i className="mdi mdi-wallet text-muted fs-16 align-middle me-1"></i>{" "}
                       <span className="align-middle">
-                        Balance : <b>Rs 5971.67</b>
+                        Balance : <b>{refferalBonus}</b>
                       </span>
                     </a>
-                    <a className="dropdown-item" href="">
+                    <a className="dropdown-item" href="/usersetting">
                       <span className="badge bg-soft-success text-success mt-1 float-end">
                         New
                       </span>
@@ -333,10 +350,38 @@ function UserSettings() {
                   </div>
                 </li>
                 {user.isAdmin ? (
-                  <li className="nav-item">
-                    <a href="/users" className="nav-link menu-link">
-                      <i className=" ri-contacts-fill"></i>Users
+                    <li className="nav-item">
+                    <a
+                      className="nav-link menu-link"
+                      href="#members"
+                      data-bs-toggle="collapse"
+                      role="button"
+                      aria-expanded="false"
+                      aria-controls="members"
+                    >
+                      <i className="ri-apps-2-line"></i>{" "}
+                      <span data-key="t-apps">Members</span>
                     </a>
+                    <div className="collapse menu-dropdown" id="members">
+                      <ul className="nav nav-sm flex-column">
+                        <li className="nav-item">
+                          <a href="/users" className="nav-link" data-key="t-calendar">
+                            {" "}
+                            All Members{" "}
+                          </a>
+                        </li>
+                        <li className="nav-item">
+                          <a
+                            href="/blockeduser"
+                            className="nav-link"
+                            data-key="t-chat"
+                          >
+                            {" "}
+                            Blocked Users{" "}
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
                   </li>
                 ) : (
                   <></>
