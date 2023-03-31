@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import _ from 'lodash';
+import { Pagination } from 'react-bootstrap';
 
 function BlockedUsers() {
 
@@ -14,6 +15,13 @@ function BlockedUsers() {
     const [refferalBonus,setRefferalBonus] = useState(0);
 
     const user = JSON.parse(localStorage.getItem('user'));
+
+    const [currentPage, setCurrentPage] = useState(1);
+    let totalItems = users.length;
+    let totalPages = Math.ceil(totalItems / 1); // 1 record per page
+    let startIndex = (currentPage - 1) * 1;
+    let endIndex = Math.min(startIndex + 1 - 1, totalItems - 1); // end index of current page
+    const currentUsers = users.slice(startIndex, endIndex + 1); // users to display in current page
 
     useEffect(()=>{
         let token = localStorage.getItem('token');
@@ -35,6 +43,12 @@ function BlockedUsers() {
       debugger;
       if(term == "") {
         setUsers(fullUsers);
+        setCurrentPage(1);
+        let totalItems = users.length;
+        let totalPages = Math.ceil(totalItems / 1); // 1 record per page
+        let startIndex = (currentPage - 1) * 1;
+        let endIndex = Math.min(startIndex + 1 - 1, totalItems - 1); // end index of current page
+        const currentUsers = users.slice(startIndex, endIndex + 1); // users to display in current page
       }else {
 
         const busers = [];
@@ -44,8 +58,18 @@ function BlockedUsers() {
           }
         });
         setUsers(busers);
+        setCurrentPage(1);
+        let totalItems = users.length;
+        let totalPages = Math.ceil(totalItems / 1); // 1 record per page
+        let startIndex = (currentPage - 1) * 1;
+        let endIndex = Math.min(startIndex + 1 - 1, totalItems - 1); // end index of current page
+        const currentUsers = users.slice(startIndex, endIndex + 1); // users to display in current page
       }
       
+    };
+
+    const handlePageChange = (pageNumber) => {
+      setCurrentPage(pageNumber);
     };
 
     const getAllUsers = async () => {
@@ -53,8 +77,15 @@ function BlockedUsers() {
           axios
             .get(base_url + "users/allUsers")
             .then((response) => {
-              setFullUsers(_.filter(response.data.users, {active: true}))
-              const busers = _.filter(response.data.users, {active: true})
+              response.data.users.forEach(user => {
+                user.humanDate = new Date(user.created_at).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                });
+              });
+              const busers = _.filter(response.data.users, {active: false})
+              setFullUsers(busers);
               setUsers(busers);
             })
             .catch((error) => {
@@ -413,7 +444,7 @@ function BlockedUsers() {
                                                         </tr>
                                                     </thead>
                                                     <tbody className="list form-check-all">
-                                                        {users.map((u) => {
+                                                        {currentUsers.map((u) => {
                                                             return (
                                                                 <tr key={u._id}>
                                                                     <th scope="row">
@@ -425,8 +456,8 @@ function BlockedUsers() {
                                                                     <td className="customer_name">{u.username}</td>
                                                                     <td className="email">{u.email}</td>
                                                                     <td className="phone">{u.phone}</td>
-                                                                    <td className="date">06 Apr, 2021</td>
-                                                                    <td className="status"><span className="badge badge-soft-success text-uppercase">{(u.active) ? 'Deactive' : 'Active'}</span></td>
+                                                                    <td className="date">{u.humanDate}</td>
+                                                                    <td className="status"><span className="badge badge-soft-success text-uppercase">Deactive</span></td>
                                                                     <td>
                                                                         <div className="d-flex gap-2">
                                                                             <div className="edit">
@@ -455,13 +486,32 @@ function BlockedUsers() {
 
                                             <div className="d-flex justify-content-end">
                                                 <div className="pagination-wrap hstack gap-2">
-                                                    <a className="page-item pagination-prev disabled" href="javascrpit:void(0)">
+                                                    {/* <a className="page-item pagination-prev disabled" href="javascrpit:void(0)">
                                                         Previous
                                                     </a>
                                                     <ul className="pagination listjs-pagination mb-0"></ul>
                                                     <a className="page-item pagination-next" href="javascrpit:void(0)">
                                                         Next
-                                                    </a>
+                                                    </a> */}
+                                                    <Pagination>
+                                  <Pagination.Prev
+                                    disabled={currentPage === 1}
+                                    onClick={() => handlePageChange(currentPage - 1)}
+                                  />
+                                  {[...Array(totalPages)].map((_, i) => (
+                                    <Pagination.Item
+                                      key={i + 1}
+                                      active={i + 1 === currentPage}
+                                      onClick={() => handlePageChange(i + 1)}
+                                    >
+                                      {i + 1}
+                                    </Pagination.Item>
+                                  ))}
+                                  <Pagination.Next
+                                    disabled={currentPage === totalPages}
+                                    onClick={() => handlePageChange(currentPage + 1)}
+                                  />
+                                </Pagination>
                                                 </div>
                                             </div>
                                         </div>
