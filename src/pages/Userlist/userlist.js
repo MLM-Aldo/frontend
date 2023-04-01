@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import _ from 'lodash';
 import { Pagination } from 'react-bootstrap';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Users() {
 
@@ -12,7 +14,8 @@ function Users() {
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
   const [fullUsers, setFullUsers] = useState();
-  const [refferalBonus, setRefferalBonus] = useState(0);
+  const [refferalBonus, setRefferalBonus] = useState(0);  
+  const [notify, setNotify] = useState("");
 
   const user = JSON.parse(localStorage.getItem('user'));
 
@@ -22,6 +25,29 @@ function Users() {
   let startIndex = (currentPage - 1) * 1;
   let endIndex = Math.min(startIndex + 1 - 1, totalItems - 1); // end index of current page
   const currentUsers = users.slice(startIndex, endIndex + 1); // users to display in current page
+
+  //Edit USers
+  const [UserName, setUserName] = useState(user.username);
+  const [email, setEmail] = useState(user.email);
+  const [phone, setPhone] = useState(user.phone);
+
+  const userUpdate =() =>{
+    axios
+      .put(base_url + "users/"+ user._id, {
+        "username": UserName,
+        "email": user.email,
+        "phone": phone
+      })
+      .then((response) => {
+        user.username = UserName;
+        user.email = email;
+        user.phone = phone;
+        localStorage.setItem('user', JSON.stringify(user));
+        setNotify(toast("User updated successfully!"))
+      }).catch((error) => {
+      });
+  }
+
 
   useEffect(() => {
     let token = localStorage.getItem('token');
@@ -585,19 +611,28 @@ function Users() {
 
                             <div className="mb-3">
                               <label htmlFor="customername-field" className="form-label">Customer Name</label>
-                              <input type="text" id="customername-field" className="form-control" placeholder="Enter Name" required />
+                              <input type="text" id="customername-field" className="form-control" placeholder="Enter Name" required 
+                              onChange={(event)=>setUserName(event.target.value)}
+                              value={UserName}
+                              />
                               <div className="invalid-feedback">Please enter a customer name.</div>
                             </div>
 
                             <div className="mb-3">
                               <label htmlFor="email-field" className="form-label">Email</label>
-                              <input type="email" id="email-field" className="form-control" placeholder="Enter Email" required />
+                              <input type="email" id="email-field" className="form-control" placeholder="Enter Email" required
+                              onChange={(event)=>setEmail(event.target.value)}
+                              value={email}
+                              />
                               <div className="invalid-feedback">Please enter an email.</div>
                             </div>
 
                             <div className="mb-3">
                               <label htmlFor="phone-field" className="form-label">Phone</label>
-                              <input type="text" id="phone-field" className="form-control" placeholder="Enter Phone no." required />
+                              <input type="text" id="phone-field" className="form-control" placeholder="Enter Phone no." required
+                              onChange={(event)=>setPhone(event.target.value)}
+                              value={phone}
+                              />
                               <div className="invalid-feedback">Please enter a phone.</div>
                             </div>
 
@@ -620,7 +655,7 @@ function Users() {
                             <div className="hstack gap-2 justify-content-end">
                               <button type="button" className="btn btn-light" data-bs-dismiss="modal">Close</button>
                               <button type="submit" className="btn btn-success" id="add-btn">Add Customer</button>
-                              <button type="button" className="btn btn-success" id="edit-btn">Update</button>
+                              <button type="button" className="btn btn-success" id="edit-btn" onClick={userUpdate}>Update</button>
                             </div>
                           </div>
                         </form>
