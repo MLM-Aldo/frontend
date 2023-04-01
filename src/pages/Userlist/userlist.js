@@ -67,50 +67,98 @@ function Users() {
 
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [searchVal, setSearchTerm] = useState("");
+
 
   const handleStartDateChange = (e) => {
     setStartDate(e.target.value);
+    search(searchVal,e.target.value, endDate )
   };
 
   const handleEndDateChange = (e) => {
     setEndDate(e.target.value);
+    search(searchVal, startDate, e.target.value )
+
   };
+
+
+  const handleSearchTerm = (term) => {
+    setSearchTerm(term);
+    search(term,startDate, endDate)
+  };
+
+  const search = (v, s, e) => {
+    let filteredUsers = fullUsers;
+  
+    if (v) {
+      filteredUsers = filteredUsers.filter(
+        (user) =>
+          _.includes(user.username, v) || _.includes(user.email, v)
+      );
+    }
+  
+    if (s) {
+      filteredUsers = filteredUsers.filter(
+        (user) => new Date(user.created_at).getDate() >= new Date(s).getDate() 
+      );
+    }
+  
+    if (e) {
+      filteredUsers = filteredUsers.filter(
+        (user) => new Date(user.created_at).getDate() <= new Date(e).getDate() 
+      );
+    }
+  
+    setUsers(filteredUsers);
+    setCurrentPage(1);
+  
+    const totalItems = filteredUsers.length;
+    const totalPages = Math.ceil(totalItems / 1); // 1 record per page
+    const startIndex = (currentPage - 1) * 1;
+    const endIndex = Math.min(startIndex + 1 - 1, totalItems - 1); // end index of current page
+    const currentUsers = filteredUsers.slice(startIndex, endIndex + 1); // users to display in current page
+  
+  };
+
 
   const handleResetClick = () => {
     setStartDate("");
     setEndDate("");
+    setSearchTerm("");
+    search("", "", "" );
   };
 
-  const searchTerm = (term) => {
-    debugger;
-    if (term == "") {
-      setUsers(fullUsers);
-      setCurrentPage(1);
-      let totalItems = users.length;
-      let totalPages = Math.ceil(totalItems / 1); // 1 record per page
-      let startIndex = (currentPage - 1) * 1;
-      let endIndex = Math.min(startIndex + 1 - 1, totalItems - 1); // end index of current page
-      const currentUsers = users.slice(startIndex, endIndex + 1); // users to display in current page
 
-    } else {
+  // const searchTerm = (term) => {
+  //   debugger;
+  //   if (term == "" ) {
+  //     setUsers(fullUsers);
+  //     setCurrentPage(1);
+  //     let totalItems = users.length;
+  //     let totalPages = Math.ceil(totalItems / 1); // 1 record per page
+  //     let startIndex = (currentPage - 1) * 1;
+  //     let endIndex = Math.min(startIndex + 1 - 1, totalItems - 1); // end index of current page
+  //     const currentUsers = users.slice(startIndex, endIndex + 1); // users to display in current page
 
-      const users = [];
-      fullUsers.map((x) => {
-        if (_.includes(x.username, term) || _.includes(x.email, term)) {
-          users.push(x)
-        }
-      });
-      setUsers(users);
-      setCurrentPage(1);
-      let totalItems = users.length;
-      let totalPages = Math.ceil(totalItems / 1); // 1 record per page
-      let startIndex = (currentPage - 1) * 1;
-      let endIndex = Math.min(startIndex + 1 - 1, totalItems - 1); // end index of current page
-      const currentUsers = users.slice(startIndex, endIndex + 1); // users to display in current page
-    }
+  //   } else {
+
+  //     const users = [];
+  //     fullUsers.map((x) => {
+  //       if (_.includes(x.username, term) || _.includes(x.email, term)) {
+  //         users.push(x)
+  //       }
+  //     });
+  //     setUsers(users);
+  //     setCurrentPage(1);
+  //     let totalItems = users.length;
+  //     let totalPages = Math.ceil(totalItems / 1); // 1 record per page
+  //     let startIndex = (currentPage - 1) * 1;
+  //     let endIndex = Math.min(startIndex + 1 - 1, totalItems - 1); // end index of current page
+  //     const currentUsers = users.slice(startIndex, endIndex + 1); // users to display in current page
+  //   }
 
 
-  };
+  // };
 
   const getAllUsers = async () => {
     try {
@@ -483,7 +531,7 @@ function Users() {
                               <div className="col-sm">
                                 <div className="d-flex justify-content-sm-end">
                                   <div className="search-box ms-2">
-                                    <input type="text" className="form-control search" placeholder="Search..." onChange={(event) => searchTerm(event.target.value)} />
+                                    <input type="text" className="form-control search" placeholder="Search..." value={searchVal} onChange={(event) => handleSearchTerm(event.target.value)} />
                                     <i className="ri-search-line search-icon"></i>
                                   </div>
                                   <label>Start Date:</label>
