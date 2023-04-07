@@ -585,236 +585,276 @@ function WithdrawHistory() {
       <div className="main-content">
         <div className="page-content">
           <div className="container-fluid">
-            <div className="row">
-              <div className="col">
-                <div className="h-100">
-                  <div className="row">
-                    <div className="col-lg-12">
-                      <div className="card">
-                        <div className="card-header">
-                          <h4 className="card-title mb-0">Add, Edit & Remove</h4>
-                        </div>
-                        {/* <!-- end card header --> */}
-
-                        <div className="card-body">
-                          <div className="listjs-table" id="customerList">
-                            <div className="row g-4 mb-3">
-                              <div className="col-sm-auto">
-                                <div>
-                                  <button type="button" className="btn btn-success add-btn" data-bs-toggle="modal" id="create-btn" data-bs-target="#showModal"><i className="ri-add-line align-bottom me-1"></i> Add</button>
-                                  <button className="btn btn-soft-danger" ><i className="ri-delete-bin-2-line"></i></button>
-                                </div>
-                              </div>
-                              <div className="col-sm">
-                                <div className="d-flex justify-content-sm-end">
-                                  <div className="search-box ms-2">
-                                    <input type="text" className="form-control search" placeholder="Search..." value={searchVal} onChange={(event) => handleSearchTerm(event.target.value)} />
-                                    <i className="ri-search-line search-icon"></i>
-                                  </div>
-                                  <label>Start Date:</label>
-                                  <input type="date" value={startDate} onChange={handleStartDateChange} />
-                                  <label>End Date:</label>
-                                  <input type="date" value={endDate} onChange={handleEndDateChange} />
-                                  <button onClick={handleResetClick}>Reset</button>
-
-                                </div>
-                              </div>
-                            </div>
-
-                            <div className="table-responsive table-card mt-3 mb-1">
-                              <table className="table align-middle table-nowrap" id="customerTable">
-                                <thead className="table-light">
-                                  <tr>
-                                    <th scope="col" style={{ width: '50px' }}>
-                                      <div className="form-check">
-                                        <input className="form-check-input" type="checkbox" id="checkAll" value="option" />
-                                      </div>
-                                    </th>
-                                    <th className="sort" data-sort="customer_name">Customer</th>
-                                    <th className="sort" data-sort="email">Email</th>
-                                    <th className="sort" data-sort="phone">Phone</th>
-                                    <th className="sort" data-sort="date">Joining Date</th>
-                                    <th className="sort" data-sort="status">Delivery Status</th>
-                                    <th className="sort" data-sort="action">Action</th>
-                                  </tr>
-                                </thead>
-                                <tbody className="list form-check-all">
-                                  {currentUsers.map((u) => {
-                                    return (
-                                      <tr key={u._id}>
-                                        <th scope="row">
-                                          <div className="form-check">
-                                            <input className="form-check-input" type="checkbox" name="chk_child" value="option1" />
-                                          </div>
-                                        </th>
-                                        <td className="id" style={{ display: 'none' }}><a href="#" className="fw-medium link-primary">#VZ2101</a></td>
-                                        <td className="customer_name">{u.username}</td>
-                                        <td className="email">{u.email}</td>
-                                        <td className="phone">{u.phone}</td>
-                                        <td className="date">{u.humanDate}</td>
-                                        <td className="status"><span className="badge badge-soft-success text-uppercase">{(u.active) ? 'Deactive' : 'Active'}</span></td>
-                                        <td>
-                                          <div className="d-flex gap-2">
-                                            <div className="edit">
-                                              <button className="btn btn-sm btn-success edit-item-btn" data-bs-toggle="modal" data-bs-target="#showModal">Edit</button>
+          <div className="row">
+                        <div className="col-xxl-3 col-sm-6">
+                            <div className="card card-animate">
+                                <div className="card-body">
+                                    <div className="d-flex justify-content-between">
+                                        <div>
+                                            <p className="fw-medium text-muted mb-0">Total Withdraw</p>
+                                            <h2 className="mt-4 ff-secondary fw-semibold"><span className="counter-value" data-target="547">0</span>$</h2>
+                                            
+                                        </div>
+                                        <div>
+                                            <div className="avatar-sm flex-shrink-0">
+                                                <span className="avatar-title bg-soft-info text-info rounded-circle fs-4">
+                                                    <i className="ri-ticket-2-line"></i>
+                                                </span>
                                             </div>
-                                            <div className="remove">
-                                              <button className="btn btn-sm btn-danger remove-item-btn" data-bs-toggle="modal" data-bs-target="#deleteRecordModal">Remove</button>
-                                            </div>
-                                          </div>
-                                        </td>
-                                      </tr>
-                                    )
-
-                                  })}
-
-                                </tbody>
-                              </table>
-                              <div className="noresult" style={{ display: 'none' }}>
-                                <div className="text-center">
-                                  {/* <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#121331,secondary:#08a88a" style={{ width: '75px', height: '75px' }}></lord-icon> */}
-                                  <h5 className="mt-2">Sorry! No Result Found</h5>
-                                  <p className="text-muted mb-0">We've searched more than 150+ Orders We did not find any orders for you search.</p>
+                                        </div>
+                                    </div>
                                 </div>
-                              </div>
-                            </div>
-
-                            <div className="d-flex justify-content-end">
-                              <div className="pagination-wrap hstack gap-2">
-                                {/* <a className="page-item pagination-prev disabled" href="javascrpit:void(0)">
-                                                        Previous
-                                                    </a>
-                                                    <ul className="pagination listjs-pagination mb-0"></ul>
-                                                    <a className="page-item pagination-next" href="javascrpit:void(0)">
-                                                        Next
-                                                    </a> */}
-
-                                <Pagination>
-                                  <Pagination.Prev
-                                    disabled={currentPage === 1}
-                                    onClick={() => handlePageChange(currentPage - 1)}
-                                  />
-                                  {[...Array(totalPages)].map((_, i) => (
-                                    <Pagination.Item
-                                      key={i + 1}
-                                      active={i + 1 === currentPage}
-                                      onClick={() => handlePageChange(i + 1)}
-                                    >
-                                      {i + 1}
-                                    </Pagination.Item>
-                                  ))}
-                                  <Pagination.Next
-                                    disabled={currentPage === totalPages}
-                                    onClick={() => handlePageChange(currentPage + 1)}
-                                  />
-                                </Pagination>
-                              </div>
-                            </div>
-                          </div>
+                            </div> 
                         </div>
-                        {/* <!-- end card --> */}
-                      </div>
-                      {/* <!-- end col --> */}
+                        
+                        <div className="col-xxl-3 col-sm-6">
+                            <div className="card card-animate">
+                                <div className="card-body">
+                                    <div className="d-flex justify-content-between">
+                                        <div>
+                                            <p className="fw-medium text-muted mb-0">Pending Withdraw Request</p>
+                                            <h2 className="mt-4 ff-secondary fw-semibold"><span className="counter-value" data-target="124">0</span>$</h2>
+                                        </div>
+                                        <div>
+                                            <div className="avatar-sm flex-shrink-0">
+                                                <span className="avatar-title bg-soft-info text-info rounded-circle fs-4">
+                                                    <i className="mdi mdi-timer-sand"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div className="col-xxl-3 col-sm-6">
+                            <div className="card card-animate">
+                                <div className="card-body">
+                                    <div className="d-flex justify-content-between">
+                                        <div>
+                                            <p className="fw-medium text-muted mb-0">Closed Withdraw Request</p>
+                                            <h2 className="mt-4 ff-secondary fw-semibold"><span className="counter-value" data-target="107">0</span>$</h2>
+                                        </div>
+                                        <div>
+                                            <div className="avatar-sm flex-shrink-0">
+                                                <span className="avatar-title bg-soft-info text-info rounded-circle fs-4">
+                                                    <i className="ri-shopping-bag-line"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>                        
                     </div>
-                    {/* <!-- end col --> */}
-                  </div>
-                  {/* <!-- end row --> */}
 
-                  <div className="modal fade" id="showModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div className="modal-dialog modal-dialog-centered">
-                      <div className="modal-content">
-                        <div className="modal-header bg-light p-3">
-                          <h5 className="modal-title" id="exampleModalLabel"></h5>
-                          <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+                    <div className="row">
+                        <div className="col-lg-12">
+                            <div className="card" id="ticketsList">
+                                <div className="card-header border-0">
+                                    <div className="d-flex align-items-center">
+                                        <h5 className="card-title mb-0 flex-grow-1">Withdraw History</h5>
+                                        <div className="flex-shrink-0">
+                                            <div className="d-flex flex-wrap gap-2">
+                                                <button className="btn btn-danger add-btn" data-bs-toggle="modal" data-bs-target="#showModal"><i className="ri-add-line align-bottom me-1"></i> Create Withdraw Request</button>
+                                                <button className="btn btn-soft-danger" id="remove-actions" onClick="deleteMultiple()"><i className="ri-delete-bin-2-line"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="card-body border border-dashed border-end-0 border-start-0">
+                                    <form>
+                                        <div className="row g-3">
+                                            <div className="col-xxl-5 col-sm-12">
+                                                <div className="search-box">
+                                                    <input type="text" className="form-control search bg-light border-light" placeholder="Search for Withdraw details or something..." />
+                                                    <i className="ri-search-line search-icon"></i>
+                                                </div>
+                                            </div>
+
+                                            <div className="col-xxl-3 col-sm-4">
+                                                <input type="text" className="form-control bg-light border-light" data-provider="flatpickr" data-date-format="d M, Y" data-range-date="true" id="demo-datepicker" placeholder="Select date range" />
+                                            </div>
+
+                                            <div className="col-xxl-3 col-sm-4">
+                                                <div className="input-light">
+                                                    <select className="form-control" data-choices data-choices-search-false name="choices-single-default" id="idStatus">
+                                                        <option value="">Status</option>
+                                                        <option value="all" selected>All</option>
+                                                        <option value="Open">Open</option>
+                                                        <option value="Inprogress">Inprogress</option>
+                                                        <option value="Closed">Closed</option>
+                                                        <option value="New">New</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div className="col-xxl-1 col-sm-4">
+                                                <button type="button" className="btn btn-primary w-100" onclick="SearchData();"> <i className="ri-equalizer-fill me-1 align-bottom"></i>
+                                                    Filters
+                                                </button>
+                                            </div>
+                                        </div>                                        
+                                    </form>
+                                </div>
+                                <div className="card-body">
+                                    <div className="table-responsive table-card mb-4">
+                                        <table className="table align-middle table-nowrap mb-0" id="ticketTable" >
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col" style={{width: '40px'}}>
+                                                        <div className="form-check">
+                                                            <input className="form-check-input" type="checkbox" id="checkAll" value="option" />
+                                                        </div>
+                                                    </th>
+                                                    <th className="sort" data-sort="id">SR No</th>
+                                                    <th className="sort" data-sort="tasks_name">Title</th>
+                                                    <th className="sort" data-sort="client_name">Withdraw Amount</th>
+                                                    <th className="sort" data-sort="assignedto">Withdraw Date</th>
+                                                    <th className="sort" data-sort="status">Status</th>
+                                                    <th className="sort" data-sort="priority">Priority</th>
+                                                    <th className="sort" data-sort="action">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="list form-check-all" id="ticket-list-data">
+                                                <tr>
+                                                    <th scope="row">
+                                                        <div className="form-check">
+                                                            <input className="form-check-input" type="checkbox" name="checkAll" value="option1" />
+                                                        </div>
+                                                    </th>
+                                                    <td className="id"><a href="javascript:void(0);" onclick="ViewTickets(this)" data-id="001" className="fw-medium link-primary">001</a></td>
+                                                    <td className="tasks_name">Amount Request</td>
+                                                    <td className="client_name">120$</td>
+                                                    <td className="create_date">08 Dec, 2021</td>
+                                                    <td className="status"><span className="badge badge-soft-warning text-uppercase">Inprogress</span></td>
+                                                    <td className="priority"><span className="badge bg-danger text-uppercase">High</span></td>
+                                                    <td>
+                                                        <div className="dropdown">
+                                                            <button className="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                <i className="ri-more-fill align-middle"></i>
+                                                            </button>
+                                                            <ul className="dropdown-menu dropdown-menu-end">
+                                                                <li><button className="dropdown-item" onclick="location.href = 'apps-tickets-details.html';"><i className="ri-eye-fill align-bottom me-2 text-muted"></i> View</button></li>
+                                                                <li><a className="dropdown-item edit-item-btn" href="#showModal" data-bs-toggle="modal"><i className="ri-pencil-fill align-bottom me-2 text-muted"></i> Edit</a></li>
+                                                                <li>
+                                                                    <a className="dropdown-item remove-item-btn" data-bs-toggle="modal" href="#deleteOrder">
+                                                                        <i className="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Delete
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div className="noresult" style={{display: 'none'}}>
+                                            <div className="text-center">
+                                                <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#121331,secondary:#08a88a" style={{width:'75px',height:'75px'}}></lord-icon>
+                                                <h5 className="mt-2">Sorry! No Result Found</h5>
+                                                <p className="text-muted mb-0">We've searched more than 150+ Withdraw History We did not find any request for you search.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="d-flex justify-content-end mt-2">
+                                        <div className="pagination-wrap hstack gap-2">
+                                            <a className="page-item pagination-prev disabled" href="#">
+                                                Previous
+                                            </a>
+                                            <ul className="pagination listjs-pagination mb-0"></ul>
+                                            <a className="page-item pagination-next" href="#">
+                                                Next
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div className="modal fade flip" id="deleteOrder" tabindex="-1" aria-hidden="true">
+                                        <div className="modal-dialog modal-dialog-centered">
+                                            <div className="modal-content">
+                                                <div className="modal-body p-5 text-center">
+                                                    <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop" colors="primary:#405189,secondary:#f06548" style={{width:'90px', height:'90px'}}></lord-icon>
+                                                    <div className="mt-4 text-center">
+                                                        <h4>You are about to delete a order ?</h4>
+                                                        <p className="text-muted fs-14 mb-4">Deleting your order will remove all of your information from our database.</p>
+                                                        <div className="hstack gap-2 justify-content-center remove">
+                                                            <button className="btn btn-link link-success fw-medium text-decoration-none" id="deleteRecord-close" data-bs-dismiss="modal"><i className="ri-close-line me-1 align-middle"></i> Close</button>
+                                                            <button className="btn btn-danger" id="delete-record">Yes, Delete It</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <form className="tablelist-form" autoComplete="off">
-                          <div className="modal-body">
-                            <div className="mb-3" id="modal-id" style={{ display: 'none' }}>
-                              <label htmlFor="id-field" className="form-label">ID</label>
-                              <input type="text" id="id-field" className="form-control" placeholder="ID" readOnly />
-                            </div>
-
-                            <div className="mb-3">
-                              <label htmlFor="customername-field" className="form-label">Customer Name</label>
-                              <input type="text" id="customername-field" className="form-control" placeholder="Enter Name" required 
-                              onChange={(event)=>setUserName(event.target.value)}
-                              value={UserName}
-                              />
-                              <div className="invalid-feedback">Please enter a customer name.</div>
-                            </div>
-
-                            <div className="mb-3">
-                              <label htmlFor="email-field" className="form-label">Email</label>
-                              <input type="email" id="email-field" className="form-control" placeholder="Enter Email" required
-                              onChange={(event)=>setEmail(event.target.value)}
-                              value={email}
-                              />
-                              <div className="invalid-feedback">Please enter an email.</div>
-                            </div>
-
-                            <div className="mb-3">
-                              <label htmlFor="phone-field" className="form-label">Phone</label>
-                              <input type="text" id="phone-field" className="form-control" placeholder="Enter Phone no." required
-                              onChange={(event)=>setPhone(event.target.value)}
-                              value={phone}
-                              />
-                              <div className="invalid-feedback">Please enter a phone.</div>
-                            </div>
-
-                            <div className="mb-3">
-                              <label htmlFor="date-field" className="form-label">Joining Date</label>
-                              <input type="text" id="date-field" className="form-control" placeholder="Select Date" required />
-                              <div className="invalid-feedback">Please select a date.</div>
-                            </div>
-
-                            <div>
-                              <label htmlFor="status-field" className="form-label">Status</label>
-                              <select className="form-control" data-trigger name="status-field" id="status-field" required>
-                                <option value="">Status</option>
-                                <option value="Active">Active</option>
-                                <option value="Block">Block</option>
-                              </select>
-                            </div>
-                          </div>
-                          <div className="modal-footer">
-                            <div className="hstack gap-2 justify-content-end">
-                              <button type="button" className="btn btn-light" data-bs-dismiss="modal">Close</button>
-                              <button type="submit" className="btn btn-success" id="add-btn">Add Customer</button>
-                              <button type="button" className="btn btn-success" id="edit-btn" onClick={userUpdate}>Update</button>
-                            </div>
-                          </div>
-                        </form>
-                      </div>
                     </div>
-                  </div>
 
-                  {/* <!-- Modal --> */}
-                  <div className="modal fade zoomIn" id="deleteRecordModal" tabIndex={-1} aria-hidden="true">
-                    <div className="modal-dialog modal-dialog-centered">
-                      <div className="modal-content">
-                        <div className="modal-header">
-                          <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" id="btn-close"></button>
-                        </div>
-                        <div className="modal-body">
-                          <div className="mt-2 text-center">
-                            {/* <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop" colors="primary:#f7b84b,secondary:#f06548" style="width:100px;height:100px"></lord-icon> */}
-                            <div className="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
-                              <h4>Are you Sure ?</h4>
-                              <p className="text-muted mx-4 mb-0">Are you Sure You want to Remove this Record ?</p>
+                    <div className="modal fade zoomIn" id="showModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div className="modal-dialog modal-dialog-centered modal-lg">
+                            <div className="modal-content border-0">
+                                <div className="modal-header p-3 bg-soft-info">
+                                    <h5 className="modal-title" id="exampleModalLabel"></h5>
+                                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+                                </div>
+                                <form className="tablelist-form" autocomplete="off">
+                                    <div className="modal-body">
+                                        <div className="row g-3">
+                                            <div className="col-lg-12">
+                                                <div id="modal-id">
+                                                    <label for="orderId" className="form-label">SR No</label>
+                                                    <input type="text" id="orderId" className="form-control" placeholder="ID" value="001" readonly />
+                                                </div>
+                                            </div>
+                                            <div className="col-lg-12">
+                                                <div>
+                                                    <label for="tasksTitle-field" className="form-label">Title</label>
+                                                    <input type="text" id="tasksTitle-field" className="form-control" placeholder="Title" required />
+                                                </div>
+                                            </div>
+                                            <div className="col-lg-6">
+                                                <div>
+                                                    <label for="client_nameName-field" className="form-label">Withdraw Amount</label>
+                                                    <input type="text" id="client_nameName-field" className="form-control" placeholder="Client Name" required />
+                                                </div>
+                                            </div>
+                                            <div className="col-lg-6">
+                                                <label for="date-field" className="form-label">Withdraw Date</label>
+                                                <input type="text" id="date-field" className="form-control" data-provider="flatpickr" data-date-format="d M, Y" placeholder="Create Date" required />
+                                            </div>
+                                            <div className="col-lg-6">
+                                                <label for="ticket-status" className="form-label">Status</label>
+                                                <select className="form-control" data-plugin="choices" name="ticket-status" id="ticket-status">
+                                                    <option value="">Status</option>
+                                                    <option value="New">New</option>
+                                                    <option value="Inprogress">Inprogress</option>
+                                                    <option value="Closed">Closed</option>
+                                                    <option value="Open">Open</option>
+                                                </select>
+                                            </div>
+                                            <div className="col-lg-6">
+                                                <label for="priority-field" className="form-label">Priority</label>
+                                                <select className="form-control" data-plugin="choices" name="priority-field" id="priority-field">
+                                                    <option value="">Priority</option>
+                                                    <option value="High">High</option>
+                                                    <option value="Medium">Medium</option>
+                                                    <option value="Low">Low</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div className="modal-footer">
+                                        <div className="hstack gap-2 justify-content-end">
+                                            <button type="button" className="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" className="btn btn-success" id="add-btn">Add Request</button>
+                                            <button type="button" className="btn btn-success" id="edit-btn">Update</button> 
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
-                          </div>
-                          <div className="d-flex gap-2 justify-content-center mt-4 mb-2">
-                            <button type="button" className="btn w-sm btn-light" data-bs-dismiss="modal">Close</button>
-                            <button type="button" className="btn w-sm btn-danger " id="delete-record">Yes, Delete It!</button>
-                          </div>
                         </div>
-                      </div>
                     </div>
-                  </div>
-                  {/* <!--end modal --> */}
-                </div>
-              </div>
-            </div>
+
           </div>
         </div>
 
