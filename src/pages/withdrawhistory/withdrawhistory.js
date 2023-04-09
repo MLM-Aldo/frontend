@@ -24,7 +24,7 @@ function WithdrawHistory() {
   let totalPages = Math.ceil(totalItems / 1); // 1 record per page
   let startIndex = (currentPage - 1) * 1;
   let endIndex = Math.min(startIndex + 1 - 1, totalItems - 1); // end index of current page
-  const currentUsers = users.slice(startIndex, endIndex + 1); // users to display in current page
+  const currentWithdrawItem = users.slice(startIndex, endIndex + 1); // users to display in current page
 
   //Edit USers
   const [UserName, setUserName] = useState(user.username);
@@ -116,7 +116,7 @@ function WithdrawHistory() {
     const totalPages = Math.ceil(totalItems / 1); // 1 record per page
     const startIndex = (currentPage - 1) * 1;
     const endIndex = Math.min(startIndex + 1 - 1, totalItems - 1); // end index of current page
-    const currentUsers = filteredUsers.slice(startIndex, endIndex + 1); // users to display in current page
+    const currentWithdrawItem = filteredUsers.slice(startIndex, endIndex + 1); // users to display in current page
   
   };
 
@@ -160,10 +160,10 @@ function WithdrawHistory() {
 
   // };
 
-  const getAllUsers = async () => {
+  const getAllWithdraw = async () => {
     try {
       axios
-        .get(base_url + "users/allUsers")
+        .get(base_url + "users/" + user._id + "/withdrawHistory")
         .then((response) => {
           response.data.users.forEach(user => {
             user.humanDate = new Date(user.created_at).toLocaleDateString('en-US', {
@@ -179,7 +179,7 @@ function WithdrawHistory() {
           let totalPages = Math.ceil(totalItems / 1); // 1 record per page
           let startIndex = (currentPage - 1) * 1;
           let endIndex = Math.min(startIndex + 1 - 1, totalItems - 1); // end index of current page
-          const currentUsers = users.slice(startIndex, endIndex + 1); // users to display in current page
+          const currentWithdrawItem = users.slice(startIndex, endIndex + 1); // users to display in current page
 
         })
         .catch((error) => {
@@ -247,7 +247,7 @@ function WithdrawHistory() {
 
 
   useEffect(() => {
-    getAllUsers();
+    getAllWithdraw();
   }, []);
 
   const deleteMultiple = () => {
@@ -671,11 +671,9 @@ function WithdrawHistory() {
                                                     <i className="ri-search-line search-icon"></i>
                                                 </div>
                                             </div>
-
                                             <div className="col-xxl-3 col-sm-4">
                                                 <input type="text" className="form-control bg-light border-light" data-provider="flatpickr" data-date-format="d M, Y" data-range-date="true" id="demo-datepicker" placeholder="Select date range" />
                                             </div>
-
                                             <div className="col-xxl-3 col-sm-4">
                                                 <div className="input-light">
                                                     <select className="form-control" data-choices data-choices-search-false name="choices-single-default" id="idStatus">
@@ -716,7 +714,9 @@ function WithdrawHistory() {
                                                 </tr>
                                             </thead>
                                             <tbody className="list form-check-all" id="ticket-list-data">
-                                                <tr>
+                                            {currentWithdrawItem.map((u) => {
+                                    return (
+                                      <tr key={u._id}>
                                                     <th scope="row">
                                                         <div className="form-check">
                                                             <input className="form-check-input" type="checkbox" name="checkAll" value="option1" />
@@ -724,7 +724,7 @@ function WithdrawHistory() {
                                                     </th>
                                                     <td className="id"><a href="javascript:void(0);" onclick="ViewTickets(this)" data-id="001" className="fw-medium link-primary">001</a></td>
                                                     <td className="tasks_name">Amount Request</td>
-                                                    <td className="client_name">120$</td>
+                                                    <td className="client_name">{u.amount_withdraw}</td>
                                                     <td className="create_date">08 Dec, 2021</td>
                                                     <td className="status"><span className="badge badge-soft-warning text-uppercase">Inprogress</span></td>
                                                     <td className="priority"><span className="badge bg-danger text-uppercase">High</span></td>
@@ -745,6 +745,8 @@ function WithdrawHistory() {
                                                         </div>
                                                     </td>
                                                 </tr>
+                                                )
+                                              })}
                                             </tbody>
                                         </table>
                                         <div className="noresult" style={{display: 'none'}}>

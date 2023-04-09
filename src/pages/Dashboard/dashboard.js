@@ -208,77 +208,77 @@ function Dashboard() {
             <div className="container-fluid">
               <div id="two-column-menu"></div>
               <ul className="navbar-nav" id="navbar-nav">
-                <li className="menu-title">
-                  <span data-key="t-menu">Menu</span>
-                </li>
+              <li className="menu-title">
+                <span data-key="t-menu">Menu</span>
+              </li>
+              <li className="nav-item">
+                <a
+                  className="nav-link menu-link"
+                  href="#sidebarDashboards"
+                  data-bs-toggle="collapse"
+                  role="button"
+                  aria-expanded="false"
+                  aria-controls="sidebarDashboards"
+                >
+                  <i className="ri-dashboard-2-line"></i>{" "}
+                  <span data-key="t-dashboards">Wallet</span>
+                </a>
+                <div
+                  className="collapse menu-dropdown"
+                  id="sidebarDashboards"
+                >
+                  <ul className="nav nav-sm flex-column">
+                    <li className="nav-item">
+                      <a href="/dashboard" className="nav-link" data-key="t-analytics">
+                        {" "}
+                        Wallet Balance{" "}
+                      </a>
+                    </li>
+                    <li className="nav-item">
+                      <a href="" className="nav-link" data-key="t-ecommerce">
+                        {" "}
+                        Transfer Funds{" "}
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              {/* <!-- end Dashboard Menu --> */}
+              <li className="nav-item">
+                <a
+                  className="nav-link menu-link"
+                  href="#sidebarApps"
+                  data-bs-toggle="collapse"
+                  role="button"
+                  aria-expanded="false"
+                  aria-controls="sidebarApps"
+                >
+                  <i className="ri-apps-2-line"></i>{" "}
+                  <span data-key="t-apps">Genealogy</span>
+                </a>
+                <div className="collapse menu-dropdown" id="sidebarApps">
+                  <ul className="nav nav-sm flex-column">
+                    <li className="nav-item">
+                      <a href="" className="nav-link" data-key="t-calendar">
+                        {" "}
+                        Reffered Lists{" "}
+                      </a>
+                    </li>
+                    <li className="nav-item">
+                      <a
+                        href="/leveltree"
+                        className="nav-link"
+                        data-key="t-chat"
+                      >
+                        {" "}
+                        Downline Tree{" "}
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              {user.isAdmin ? (
                 <li className="nav-item">
-                  <a
-                    className="nav-link menu-link"
-                    href="#sidebarDashboards"
-                    data-bs-toggle="collapse"
-                    role="button"
-                    aria-expanded="false"
-                    aria-controls="sidebarDashboards"
-                  >
-                    <i className="ri-dashboard-2-line"></i>{" "}
-                    <span data-key="t-dashboards">Wallet</span>
-                  </a>
-                  <div
-                    className="collapse menu-dropdown"
-                    id="sidebarDashboards"
-                  >
-                    <ul className="nav nav-sm flex-column">
-                      <li className="nav-item">
-                        <a href="/dashboard" className="nav-link" data-key="t-analytics">
-                          {" "}
-                          Wallet Balance{" "}
-                        </a>
-                      </li>
-                      <li className="nav-item">
-                        <a href="" className="nav-link" data-key="t-ecommerce">
-                          {" "}
-                          Transfer Funds{" "}
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </li>
-                {/* <!-- end Dashboard Menu --> */}
-                <li className="nav-item">
-                  <a
-                    className="nav-link menu-link"
-                    href="#sidebarApps"
-                    data-bs-toggle="collapse"
-                    role="button"
-                    aria-expanded="false"
-                    aria-controls="sidebarApps"
-                  >
-                    <i className="ri-apps-2-line"></i>{" "}
-                    <span data-key="t-apps">Genealogy</span>
-                  </a>
-                  <div className="collapse menu-dropdown" id="sidebarApps">
-                    <ul className="nav nav-sm flex-column">
-                      <li className="nav-item">
-                        <a href="" className="nav-link" data-key="t-calendar">
-                          {" "}
-                          Reffered Lists{" "}
-                        </a>
-                      </li>
-                      <li className="nav-item">
-                        <a
-                          href="/leveltree"
-                          className="nav-link"
-                          data-key="t-chat"
-                        >
-                          {" "}
-                          Downline Tree{" "}
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </li>
-                {user.isAdmin ? (
-                  <li className="nav-item">
                   <a
                     className="nav-link menu-link"
                     href="#members"
@@ -311,10 +311,87 @@ function Dashboard() {
                     </ul>
                   </div>
                 </li>
-                ) : (
-                  <></>
-                )}
-              </ul>
+              ) : (
+                <></>
+              )}
+              <li className="nav-item">
+                <a
+                  className="nav-link menu-link"
+                  href="#requestfund"
+                  data-bs-toggle="collapse"
+                  role="button"
+                  aria-expanded="false"
+                  aria-controls="requestfund"
+                >
+                  <i className="ri-dashboard-2-line"></i>{" "}
+                  <span data-key="t-dashboards">Request Funds</span>
+                </a>
+                <div
+                  className="collapse menu-dropdown"
+                  id="requestfund"
+                >
+                  <ul className="nav nav-sm flex-column">
+                    <li className="nav-item">
+                      <a href="/requestfund" className="nav-link" data-key="t-analytics">
+                        {" "}
+                        Request Funds{" "}
+                      </a>
+                    </li>
+                    <li className="nav-item">
+                      <a href="/requestfundhistory" className="nav-link" data-key="t-ecommerce">
+                        {" "}
+                        Request Fund History{" "}
+                      </a>
+                    </li>                    
+                  </ul>
+                </div>
+              </li>
+              <li className="nav-item">
+                <a
+                  className="nav-link menu-link"
+                  href="#withdraw"
+                  data-bs-toggle="collapse"
+                  role="button"
+                  aria-expanded="false"
+                  aria-controls="withdraw"
+                >
+                  <i className="ri-dashboard-2-line"></i>{" "}
+                  <span data-key="t-dashboards">Withdraw</span>
+                </a>
+                <div
+                  className="collapse menu-dropdown"
+                  id="withdraw"
+                >
+                  <ul className="nav nav-sm flex-column">
+                    <li className="nav-item">
+                      <a href="/withdrawFund" className="nav-link" data-key="t-analytics">
+                        {" "}
+                        Withdraw Funds{" "}
+                      </a>
+                    </li>
+                    <li className="nav-item">
+                      <a href="/withdrawhistory" className="nav-link" data-key="t-ecommerce">
+                        {" "}
+                        Withdraw History{" "}
+                      </a>
+                    </li>
+                    <li className="nav-item">
+                      <a href="/pendingwithdraw" className="nav-link" data-key="t-ecommerce">
+                        {" "}
+                        Pending Withdraw{" "}
+                      </a>
+                    </li>
+                    <li className="nav-item">
+                      <a href="/completedwithdraw" className="nav-link" data-key="t-ecommerce">
+                        {" "}
+                        Completed Withdraw{" "}
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </li>
+              
+            </ul>
             </div>
           </div>
 

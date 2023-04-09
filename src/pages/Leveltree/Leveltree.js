@@ -387,41 +387,118 @@ function LevelTree() {
               </li>
               {user.isAdmin ? (
                 <li className="nav-item">
+                  <a
+                    className="nav-link menu-link"
+                    href="#members"
+                    data-bs-toggle="collapse"
+                    role="button"
+                    aria-expanded="false"
+                    aria-controls="members"
+                  >
+                    <i className="ri-apps-2-line"></i>{" "}
+                    <span data-key="t-apps">Members</span>
+                  </a>
+                  <div className="collapse menu-dropdown" id="members">
+                    <ul className="nav nav-sm flex-column">
+                      <li className="nav-item">
+                        <a href="/users" className="nav-link" data-key="t-calendar">
+                          {" "}
+                          All Members{" "}
+                        </a>
+                      </li>
+                      <li className="nav-item">
+                        <a
+                          href="/blockeduser"
+                          className="nav-link"
+                          data-key="t-chat"
+                        >
+                          {" "}
+                          Blocked Users{" "}
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+              ) : (
+                <></>
+              )}
+              <li className="nav-item">
                 <a
                   className="nav-link menu-link"
-                  href="#members"
+                  href="#requestfund"
                   data-bs-toggle="collapse"
                   role="button"
                   aria-expanded="false"
-                  aria-controls="members"
+                  aria-controls="requestfund"
                 >
-                  <i className="ri-apps-2-line"></i>{" "}
-                  <span data-key="t-apps">Members</span>
+                  <i className="ri-dashboard-2-line"></i>{" "}
+                  <span data-key="t-dashboards">Request Funds</span>
                 </a>
-                <div className="collapse menu-dropdown" id="members">
+                <div
+                  className="collapse menu-dropdown"
+                  id="requestfund"
+                >
                   <ul className="nav nav-sm flex-column">
                     <li className="nav-item">
-                      <a href="/users" className="nav-link" data-key="t-calendar">
+                      <a href="/requestfund" className="nav-link" data-key="t-analytics">
                         {" "}
-                        All Members{" "}
+                        Request Funds{" "}
                       </a>
                     </li>
                     <li className="nav-item">
-                      <a
-                        href="/blockeduser"
-                        className="nav-link"
-                        data-key="t-chat"
-                      >
+                      <a href="/requestfundhistory" className="nav-link" data-key="t-ecommerce">
                         {" "}
-                        Blocked Users{" "}
+                        Request Fund History{" "}
+                      </a>
+                    </li>                    
+                  </ul>
+                </div>
+              </li>
+              <li className="nav-item">
+                <a
+                  className="nav-link menu-link"
+                  href="#withdraw"
+                  data-bs-toggle="collapse"
+                  role="button"
+                  aria-expanded="false"
+                  aria-controls="withdraw"
+                >
+                  <i className="ri-dashboard-2-line"></i>{" "}
+                  <span data-key="t-dashboards">Withdraw</span>
+                </a>
+                <div
+                  className="collapse menu-dropdown"
+                  id="withdraw"
+                >
+                  <ul className="nav nav-sm flex-column">
+                    <li className="nav-item">
+                      <a href="/withdrawFund" className="nav-link" data-key="t-analytics">
+                        {" "}
+                        Withdraw Funds{" "}
+                      </a>
+                    </li>
+                    <li className="nav-item">
+                      <a href="/withdrawhistory" className="nav-link" data-key="t-ecommerce">
+                        {" "}
+                        Withdraw History{" "}
+                      </a>
+                    </li>
+                    <li className="nav-item">
+                      <a href="/pendingwithdraw" className="nav-link" data-key="t-ecommerce">
+                        {" "}
+                        Pending Withdraw{" "}
+                      </a>
+                    </li>
+                    <li className="nav-item">
+                      <a href="/completedwithdraw" className="nav-link" data-key="t-ecommerce">
+                        {" "}
+                        Completed Withdraw{" "}
                       </a>
                     </li>
                   </ul>
                 </div>
               </li>
-              ) : (
-                <></>
-              )}
+              
             </ul>
           </div>
         </div>

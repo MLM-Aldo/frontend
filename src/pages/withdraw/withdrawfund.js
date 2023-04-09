@@ -29,16 +29,16 @@ function WithdrawFund() {
 //Edit Request Fund
 const [amount_withdraw, setwithdrawFund] = useState("")
 
-const requestAmount = async (e) => {
+const withdrawAmount = async (e) => {
   e.preventDefault();
   try {
     axios
       .post(
-        base_url + "users/"+ user._id + "/Withdraw",
+        base_url + "users/"+ user._id + "/withdrawFund",
         JSON.stringify({ amount_withdraw})
       )
       .then((response) => {
-        setrequestFund("")
+        setwithdrawFund("")
       setNotify(toast("Amount Withdraw Request Sent successfully!"))
       })
       .catch((error) => {
@@ -616,24 +616,24 @@ const requestAmount = async (e) => {
                     <div className="col-lg-12">
                       <div className="card">
                         <div className="card-header">
-                          <h4 className="card-title mb-0">Add, Edit & Remove</h4>
+                          <h4 className="card-title mb-0">Withdraw Amount</h4>
                         </div>
                         {/* <!-- end card header --> */}
                         <div className="card-body">
                           <div className="row">
                             <div className="col-lg-12 col-sm-6">
                               <div>
-                                <label for="requestedAmount" className="text-muted text-uppercase fw-semibold">Enter Required Amount (In Dollars only)</label>
+                                <label htmlFor="requestedAmount" className="text-muted text-uppercase fw-semibold">Enter Required Amount (In Dollars only)</label>
                               </div>
-                              <div class="mb-2">
-                                <input type="text" value={amount_withdraw}  onChange={(e) => setwithdrawFund(e.target.value)} className="form-control bg-light border-0" id="requestedAmount" placeholder="Request Amount" required />
+                              <div className="mb-2">
+                                <input type="text" value={amount_withdraw}  onChange={(e) => setwithdrawFund(e.target.value)} className="form-control bg-light border-0" id="requestedAmount" placeholder="Withdraw Amount" required />
                                 <div className="invalid-feedback">
                                   Please enter Valid Amount
                                 </div>
                               </div>
                             </div>
                             <div className="mt-4">
-                                            <button className="btn btn-success w-100" onClick={requestAmount}>Send Request</button>
+                                            <button className="btn btn-success w-100" onClick={withdrawAmount}>Send Withdraw Request</button>
                               </div>
                           </div>
                         </div>

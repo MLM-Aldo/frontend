@@ -601,9 +601,9 @@ function RequestFund() {
                           <div className="row">
                             <div className="col-lg-12 col-sm-6">
                               <div>
-                                <label for="requestedAmount" className="text-muted text-uppercase fw-semibold">Enter Required Amount (In Dollars only)</label>
+                                <label htmlFor="requestedAmount" className="text-muted text-uppercase fw-semibold">Enter Required Amount (In Dollars only)</label>
                               </div>
-                              <div class="mb-2">
+                              <div className="mb-2">
                                 <input type="text" value={amount_requested}  onChange={(e) => setrequestFund(e.target.value)} className="form-control bg-light border-0" id="requestedAmount" placeholder="Request Amount" required />
                                 <div className="invalid-feedback">
                                   Please enter Valid Amount
