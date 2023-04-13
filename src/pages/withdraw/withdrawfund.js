@@ -15,7 +15,15 @@ function WithdrawFund() {
   const navigate = useNavigate();
   const [fullUsers, setFullUsers] = useState();
   const [refferalBonus, setRefferalBonus] = useState(0);  
+  const [withdrawHistory, setWithdrawHistory] = useState([]);
   const [notify, setNotify] = useState("");
+  const [approvedWithdrawals, setApprovedWithdrawals] = useState([]);
+
+
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString();
+  }
 
   const user = JSON.parse(localStorage.getItem('user'));
 
@@ -32,6 +40,10 @@ const [amount_withdraw, setwithdrawFund] = useState("")
 const withdrawAmount = async (e) => {
   e.preventDefault();
   try {
+    if (amount_withdraw > walletBalance) {
+      setNotify(toast("Withdraw amount should be below wallet balance or Equal to wallet Balance !"))
+      return;
+    }
     axios
       .post(
         base_url + "users/"+ user._id + "/withdrawFund",
@@ -39,7 +51,7 @@ const withdrawAmount = async (e) => {
       )
       .then((response) => {
         setwithdrawFund("")
-      setNotify(toast("Amount Withdraw Request Sent successfully!"))
+        setNotify(toast("Amount Withdraw Request Sent successfully!"))
       })
       .catch((error) => {
         setError(error.message);
@@ -152,38 +164,6 @@ const withdrawAmount = async (e) => {
     search("", "", "" );
   };
 
-
-  // const searchTerm = (term) => {
-  //   debugger;
-  //   if (term == "" ) {
-  //     setUsers(fullUsers);
-  //     setCurrentPage(1);
-  //     let totalItems = users.length;
-  //     let totalPages = Math.ceil(totalItems / 1); // 1 record per page
-  //     let startIndex = (currentPage - 1) * 1;
-  //     let endIndex = Math.min(startIndex + 1 - 1, totalItems - 1); // end index of current page
-  //     const currentUsers = users.slice(startIndex, endIndex + 1); // users to display in current page
-
-  //   } else {
-
-  //     const users = [];
-  //     fullUsers.map((x) => {
-  //       if (_.includes(x.username, term) || _.includes(x.email, term)) {
-  //         users.push(x)
-  //       }
-  //     });
-  //     setUsers(users);
-  //     setCurrentPage(1);
-  //     let totalItems = users.length;
-  //     let totalPages = Math.ceil(totalItems / 1); // 1 record per page
-  //     let startIndex = (currentPage - 1) * 1;
-  //     let endIndex = Math.min(startIndex + 1 - 1, totalItems - 1); // end index of current page
-  //     const currentUsers = users.slice(startIndex, endIndex + 1); // users to display in current page
-  //   }
-
-
-  // };
-
   const getAllUsers = async () => {
     try {
       axios
@@ -273,6 +253,47 @@ const withdrawAmount = async (e) => {
   useEffect(() => {
     getAllUsers();
   }, []);
+
+  const [walletBalance, setWalletBalance] = useState(refferalBonus);
+
+  const getAllWithdraw = async () => {
+    try {
+      const response = await axios.get(base_url + "users/" + user._id + "/withdrawHistory");
+      const withdrawHistory = response.data.withdrawLists.map((item) => ({
+        ...item,
+        createdAt: formatDate(item.created_at),
+      }));
+      const approvedWithdrawals = withdrawHistory.filter(item => item.amount_withdraw_status === "Approved");
+      setWithdrawHistory(withdrawHistory);
+      setApprovedWithdrawals(approvedWithdrawals);
+      return withdrawHistory;
+    } catch (error) {
+      console.error(error);
+      setError(error.message);
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    getAllWithdraw().then(withdrawHistory => {
+      const requests = withdrawHistory.filter(item => item.amount_withdraw_status === "Approved").map(item => ({
+        request: { amount_withdraw: item.amount_withdraw }
+      }));
+      const total_amount_withdraw = requests.reduce((total, item) => total + item.request.amount_withdraw, 0);
+      const newBalance = refferalBonus - total_amount_withdraw;
+      setWalletBalance(newBalance);
+    });
+  }, [refferalBonus, setWalletBalance]);
+
+  const requests = approvedWithdrawals.map(item => ({
+    request: { amount_withdraw: item.amount_withdraw }
+  }));
+
+  let total_amount_withdraw = 0;
+
+  for (const item of requests) {
+    total_amount_withdraw += item.request.amount_withdraw;
+  }
 
   const deleteMultiple = () => {
 
@@ -662,6 +683,7 @@ const withdrawAmount = async (e) => {
             </div>
           </div>
         </footer>
+        <ToastContainer />
       </div>
     </div>
 

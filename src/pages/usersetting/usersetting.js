@@ -65,19 +65,6 @@ function UserSettings() {
         .catch((error) => {
           setError(error.message);
         });
-      // const response = await fetch(base_url + 'users/allUsers', {
-      //     method: 'GET',
-      //     headers: {
-      //         'Content-Type': 'application/json',
-      //         'authorization': 'Bearer ' +token
-      //     },
-      // });
-      // const data = await response.json();
-      // if (response.ok) {
-      //     setUsers(data.users);
-      // } else {
-      //     setError(data.message);
-      // }
     } catch (error) {
       setError("An error occurred. Please try again.");
     }
@@ -115,20 +102,6 @@ function UserSettings() {
           setError(error.message);
           navigate("/login");
         });
-      // const response = await fetch(base_url + 'users/logout', {
-      //     method: 'POST',
-      //     headers: {
-      //         'Content-Type': 'application/json'
-      //     },
-      // });
-      // const data = await response.json();
-      // if (response.ok) {
-      //     localStorage.removeItem('token');
-      //     localStorage.removeItem('user');
-      //     navigate('/login');
-      // } else {
-      //     setError(data.message);
-      // }
     } catch (error) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');

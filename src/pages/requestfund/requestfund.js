@@ -27,7 +27,7 @@ function RequestFund() {
   const currentUsers = users.slice(startIndex, endIndex + 1); // users to display in current page
 
   //Edit Request Fund
-  const [amount_requested, setrequestFund] = useState("")
+  const [amount_requested, setRequestFund] = useState("")
 
   const requestAmount = async (e) => {
     e.preventDefault();
@@ -38,8 +38,9 @@ function RequestFund() {
           JSON.stringify({ amount_requested })
         )
         .then((response) => {
-          setrequestFund("")
-        setNotify(toast("Fund Request Sent successfully!"))
+          setRequestFund("");
+          console.log(amount_requested);
+          setNotify(toast("Fund Request Sent successfully!"))
         })
         .catch((error) => {
           setError(error.message);
@@ -593,7 +594,7 @@ function RequestFund() {
                     <div className="col-lg-12">
                       <div className="card">
                         <div className="card-header">
-                          <h4 className="card-title mb-0">Withdraw Fund</h4>
+                          <h4 className="card-title mb-0">Fund Request</h4>
                         </div>
                         {/* <!-- end card header --> */}
 
@@ -604,7 +605,7 @@ function RequestFund() {
                                 <label htmlFor="requestedAmount" className="text-muted text-uppercase fw-semibold">Enter Required Amount (In Dollars only)</label>
                               </div>
                               <div className="mb-2">
-                                <input type="text" value={amount_requested}  onChange={(e) => setrequestFund(e.target.value)} className="form-control bg-light border-0" id="requestedAmount" placeholder="Request Amount" required />
+                                <input type="text" value={amount_requested}  onChange={(e) => setRequestFund(e.target.value)} className="form-control bg-light border-0" id="requestedAmount" placeholder="Request Amount" required />
                                 <div className="invalid-feedback">
                                   Please enter Valid Amount
                                 </div>
@@ -641,6 +642,7 @@ function RequestFund() {
             </div>
           </div>
         </footer>
+        <ToastContainer />
       </div>
     </div>
 
