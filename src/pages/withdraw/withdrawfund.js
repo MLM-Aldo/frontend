@@ -58,7 +58,11 @@ const withdrawAmount = async (e) => {
     // }
     
     // Retrieve the user's transaction password hash from the database
-    const response = await axios.post(base_url + "users/transactionPassword",{  transactionPassword });
+    const username = user.username;
+    const response = await axios.post(
+      base_url + "users/" + user._id + "/transactionPassword",
+      { username, transactionPassword }
+    );
     const transactionPasswordHash = response.data.transactionPassword;
     console.log("Transaction Password Hash:", transactionPasswordHash);
     console.log("Entered Password:", transactionPassword);
