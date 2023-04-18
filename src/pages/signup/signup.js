@@ -6,7 +6,8 @@ function Signup() {
 
     const [email, setEmail] = useState("")
     const [username, setUsername] = useState("")
-    const [password, setPassword] = useState("")
+    const [password, setPassword] = useState("")    
+    const [transactionPassword, setTransactionPassword] = useState('');
     const [referredBy, setReferredBy] = useState("")
     const [phone, setPhone] = useState("")
     const navigate = useNavigate();
@@ -38,7 +39,7 @@ function Signup() {
           axios
             .post(
               base_url + "users/register",
-              JSON.stringify({ username, password, email, phone, referredBy })
+              JSON.stringify({ username, password, transactionPassword, email, phone, referredBy })
             )
             .then((response) => {
               navigate("/login");
@@ -104,7 +105,7 @@ function Signup() {
                                     <h5 className="text-primary">Create New Account</h5>
                                 </div>
                                 <div className="p-2 mt-4">
-                                    <form className="needs-validation" novalidate >
+                                    <form className="needs-validation" noValidate >
 
                                         <div className="mb-3">
                                             <label for="useremail" className="form-label">Email <span className="text-danger">*</span></label>
@@ -124,10 +125,29 @@ function Signup() {
                                         <div className="mb-3">
                                             <label className="form-label" for="password-input">Password</label>
                                             <div className="position-relative auth-pass-inputgroup">
-                                                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}className="form-control pe-5 password-input" onpaste="return false" placeholder="Enter password" id="password-input" aria-describedby="passwordInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required />
+                                                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}className="form-control pe-5 password-input"  placeholder="Enter password" id="password-input" aria-describedby="passwordInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required />
                                                 <button className="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon"><i className="ri-eye-fill align-middle"></i></button>
                                                 <div className="invalid-feedback">
                                                     Please enter password
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div id="password-contain" className="p-3 bg-light mb-2 rounded">
+                                            <h5 className="fs-13">Password must contain:</h5>
+                                            <p id="pass-length" className="invalid fs-12 mb-2">Minimum <b>8 characters</b></p>
+                                            <p id="pass-lower" className="invalid fs-12 mb-2">At <b>lowercase</b> letter (a-z)</p>
+                                            <p id="pass-upper" className="invalid fs-12 mb-2">At least <b>uppercase</b> letter (A-Z)</p>
+                                            <p id="pass-number" className="invalid fs-12 mb-0">A least <b>number</b> (0-9)</p>
+                                        </div>
+
+                                        <div className="mb-3">
+                                            <label className="form-label" htmlFor="transaction-password-input">Transaction Password</label>
+                                            <div className="position-relative auth-pass-inputgroup">
+                                                <input type="password" value={transactionPassword} onChange={(e) => setTransactionPassword(e.target.value)} className="form-control pe-5 password-input"  placeholder="Enter Transaction Password" id="transaction-password-input" aria-describedby="passwordInput" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required />
+                                                <button className="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="transaction-password-addon"><i className="ri-eye-fill align-middle"></i></button>
+                                                <div className="invalid-feedback">
+                                                    Please enter transaction password
                                                 </div>
                                             </div>
                                         </div>

@@ -1,7 +1,7 @@
 
 /*# sourceMappingURL=custom.min.css.map */
 .navbar-menu{
-    background: #032631;
+    background: #032631 !important;
 }
 .navbar-menu .navbar-nav .nav-link{
     color: #fff;

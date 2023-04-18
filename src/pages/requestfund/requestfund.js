@@ -627,49 +627,49 @@ function RequestFund() {
                 </div>
               </div>
             </div>
-            <div classname="row">
-                        <div classname="col-lg-12">
-                            <div classname="card">
-                                <div classname="card-header">
-                                    <h4 classname="card-title mb-0">Dropzone</h4>
+            <div className="row">
+                        <div className="col-lg-12">
+                            <div className="card">
+                                <div className="card-header">
+                                    <h4 className="card-title mb-0">Dropzone</h4>
                                 </div>
                                 {/* <!-- end card header --> */}
 
-                                <div classname="card-body">
-                                    <p classname="text-muted">drag and drop file uploads with image previews.</p>
+                                <div className="card-body">
+                                    <p className="text-muted">drag and drop file uploads with image previews.</p>
 
-                                    <div classname="dropzone">
-                                        <div classname="fallback">
-                                            <input name="file" type="file" multiple="multiple" />
+                                    <div className="dropzone">
+                                        <div className="fallback">
+                                            <input name="file" type="file"  />
                                         </div>
-                                        <div classname="dz-message needsclick">
-                                            <div classname="mb-3">
-                                                <i classname="display-4 text-muted ri-upload-cloud-2-fill"></i>
+                                        <div className="dz-message needsclick">
+                                            <div className="mb-3">
+                                                <i className="display-4 text-muted ri-upload-cloud-2-fill"></i>
                                             </div>
 
                                             <h4>Drop files here or click to upload.</h4>
                                         </div>
                                     </div>
 
-                                    <ul classname="list-unstyled mb-0" id="dropzone-preview">
-                                        <li classname="mt-2" id="dropzone-preview-list">
+                                    <ul className="list-unstyled mb-0" id="dropzone-preview">
+                                        <li className="mt-2" id="dropzone-preview-list">
                                             {/* <!-- This is used as the file preview template --> */}
-                                            <div classname="border rounded">
-                                                <div classname="d-flex p-2">
-                                                    <div classname="flex-shrink-0 me-3">
-                                                        <div classname="avatar-sm bg-light rounded">
-                                                            <img data-dz-thumbnail classname="img-fluid rounded d-block" src="assets/images/new-document.png" alt="Dropzone-Image" />
+                                            <div className="border rounded">
+                                                <div className="d-flex p-2">
+                                                    <div className="flex-shrink-0 me-3">
+                                                        <div className="avatar-sm bg-light rounded">
+                                                            <img data-dz-thumbnail className="img-fluid rounded d-block" src="assets/images/new-document.png" alt="Dropzone-Image" />
                                                         </div>
                                                     </div>
-                                                    <div classname="flex-grow-1">
-                                                        <div classname="pt-1">
-                                                            <h5 classname="fs-14 mb-1" data-dz-name>&nbsp;</h5>
-                                                            <p classname="fs-13 text-muted mb-0" data-dz-size></p>
-                                                            <strong classname="error text-danger" data-dz-errormessage></strong>
+                                                    <div className="flex-grow-1">
+                                                        <div className="pt-1">
+                                                            <h5 className="fs-14 mb-1" data-dz-name>&nbsp;</h5>
+                                                            <p className="fs-13 text-muted mb-0" data-dz-size></p>
+                                                            <strong className="error text-danger" data-dz-errormessage></strong>
                                                         </div>
                                                     </div>
-                                                    <div classname="flex-shrink-0 ms-3">
-                                                        <button data-dz-remove classname="btn btn-sm btn-danger">Delete</button>
+                                                    <div className="flex-shrink-0 ms-3">
+                                                        <button data-dz-remove className="btn btn-sm btn-danger">Delete</button>
                                                     </div>
                                                 </div>
                                             </div>

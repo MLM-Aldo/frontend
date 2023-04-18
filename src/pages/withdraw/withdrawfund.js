@@ -5,6 +5,8 @@ import _ from 'lodash';
 import { Pagination } from 'react-bootstrap';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import bcrypt from "bcryptjs-react";
+
 
 function WithdrawFund() {
 
@@ -20,10 +22,20 @@ function WithdrawFund() {
   const [approvedWithdrawals, setApprovedWithdrawals] = useState([]);
 
 
+
   function formatDate(dateString) {
     const date = new Date(dateString);
     return date.toLocaleDateString();
   }
+
+  const [transactionPassword, setTransactionPassword] = useState('');
+  const [isTransactionPasswordValid, setIsTransactionPasswordValid] = useState(false);
+
+  const handleTransactionPasswordChange = (e) => {
+    const password = e.target.value;
+    setTransactionPassword(password);
+    setIsTransactionPasswordValid(password.length >= 6); // Set the validity based on your validation logic
+  };
 
   const user = JSON.parse(localStorage.getItem('user'));
 
@@ -40,14 +52,30 @@ const [amount_withdraw, setwithdrawFund] = useState("")
 const withdrawAmount = async (e) => {
   e.preventDefault();
   try {
-    if (amount_withdraw > walletBalance) {
-      setNotify(toast("Withdraw amount should be below wallet balance or Equal to wallet Balance !"))
+    // if (amount_withdraw > walletBalance) {
+    //   setNotify(toast("Withdraw amount should be below wallet balance or Equal to wallet Balance !"))
+    //   return;
+    // }
+    
+    // Retrieve the user's transaction password hash from the database
+    const response = await axios.post(base_url + "users/transactionPassword",{  transactionPassword });
+    const transactionPasswordHash = response.data.transactionPassword;
+    console.log("Transaction Password Hash:", transactionPasswordHash);
+    console.log("Entered Password:", transactionPassword);
+
+    // Compare the entered password with the stored hash
+    const isTransactionPasswordMatch = await bcrypt.compare(transactionPassword, transactionPasswordHash);
+    console.log("Password Match:", isTransactionPasswordMatch);
+
+    if (!isTransactionPasswordMatch) {
+      setNotify(toast("Transaction password is incorrect. Please try again."));
       return;
     }
+
     axios
       .post(
         base_url + "users/"+ user._id + "/withdrawFund",
-        JSON.stringify({ amount_withdraw})
+        JSON.stringify({ amount_withdraw, transactionPassword})
       )
       .then((response) => {
         setwithdrawFund("")
@@ -189,19 +217,6 @@ const withdrawAmount = async (e) => {
         .catch((error) => {
           setError(error.message);
         });
-      // const response = await fetch(base_url + 'users/allUsers', {
-      //     method: 'GET',
-      //     headers: {
-      //         'Content-Type': 'application/json',
-      //         'authorization': 'Bearer ' +token
-      //     },
-      // });
-      // const data = await response.json();
-      // if (response.ok) {
-      //     setUsers(data.users);
-      // } else {
-      //     setError(data.message);
-      // }
     } catch (error) {
       setError("An error occurred. Please try again.");
     }
@@ -227,20 +242,6 @@ const withdrawAmount = async (e) => {
           setError(error.message);
           navigate("/login");
         });
-      // const response = await fetch(base_url + 'users/logout', {
-      //     method: 'POST',
-      //     headers: {
-      //         'Content-Type': 'application/json'
-      //     },
-      // });
-      // const data = await response.json();
-      // if (response.ok) {
-      //     localStorage.removeItem('token');
-      //     localStorage.removeItem('user');
-      //     navigate('/login');
-      // } else {
-      //     setError(data.message);
-      // }
     } catch (error) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
@@ -642,7 +643,7 @@ const withdrawAmount = async (e) => {
                         {/* <!-- end card header --> */}
                         <div className="card-body">
                           <div className="row">
-                            <div className="col-lg-12 col-sm-6">
+                            <div className="col-lg-6 col-sm-6">
                               <div>
                                 <label htmlFor="requestedAmount" className="text-muted text-uppercase fw-semibold">Enter Required Amount (In Dollars only)</label>
                               </div>
@@ -650,6 +651,23 @@ const withdrawAmount = async (e) => {
                                 <input type="text" value={amount_withdraw}  onChange={(e) => setwithdrawFund(e.target.value)} className="form-control bg-light border-0" id="requestedAmount" placeholder="Withdraw Amount" required />
                                 <div className="invalid-feedback">
                                   Please enter Valid Amount
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-lg-6 col-sm-6">
+                              <div>
+                                <label htmlFor="requestedAmount" className="text-muted text-uppercase fw-semibold">Enter Transaction Pasword</label>
+                              </div>
+                              <div className="mb-2">
+                                <input type="text" 
+                                className="form-control"
+                                id="transactionPassword"
+                                name="transactionPassword"
+                                value={transactionPassword}
+                                onChange={handleTransactionPasswordChange}
+                                 placeholder="Withdraw Amount" required />
+                                <div className="invalid-feedback">
+                                  Please enter Valid Password
                                 </div>
                               </div>
                             </div>
