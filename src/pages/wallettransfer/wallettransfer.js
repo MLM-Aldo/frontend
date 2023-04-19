@@ -7,7 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import bcrypt from "bcryptjs-react";
 
-function RequestFund() {
+function WalletTransfer() {
 
   const base_url = process.env.REACT_APP_API_URL;
   const [error, setError] = useState('');
@@ -28,7 +28,9 @@ function RequestFund() {
   const currentUsers = users.slice(startIndex, endIndex + 1); // users to display in current page
 
   //Edit Request Fund
-  const [amount_requested, setRequestFund] = useState("");
+  const [sent_amount, setSentAmount] = useState("");
+  const [sender_id, setSenderId] =  useState("");
+  const [reciever_id, setRecieverId] = useState("");
 
   const [transactionPassword, setTransactionPassword] = useState('');
   const [isTransactionPasswordValid, setIsTransactionPasswordValid] = useState(false);
@@ -39,7 +41,7 @@ function RequestFund() {
     setIsTransactionPasswordValid(password.length >= 6); // Set the validity based on your validation logic
   };
 
-  const requestAmount = async (e) => {
+  const transferAmount = async (e) => {
     e.preventDefault();
     try {
       const username = user.username;
@@ -63,13 +65,13 @@ function RequestFund() {
       }
       axios
         .post(
-          base_url + "users/"+ user._id + "/requestFund",
-          JSON.stringify({ amount_requested })
+          base_url + "users/"+ user._id + "/UsersTransactions",
+          JSON.stringify({ sent_amount, sender_id, reciever_id })
         )
         .then((response) => {
-          setRequestFund("");
-          console.log(amount_requested);
-          setNotify(toast("Fund Request Sent successfully!"))
+          setSentAmount("");
+          console.log(sent_amount);
+          setNotify(toast("Amount Sent successfully!"))
         })
         .catch((error) => {
           setError(error.message);
@@ -160,37 +162,6 @@ function RequestFund() {
   };
 
 
-  // const searchTerm = (term) => {
-  //   debugger;
-  //   if (term == "" ) {
-  //     setUsers(fullUsers);
-  //     setCurrentPage(1);
-  //     let totalItems = users.length;
-  //     let totalPages = Math.ceil(totalItems / 1); // 1 record per page
-  //     let startIndex = (currentPage - 1) * 1;
-  //     let endIndex = Math.min(startIndex + 1 - 1, totalItems - 1); // end index of current page
-  //     const currentUsers = users.slice(startIndex, endIndex + 1); // users to display in current page
-
-  //   } else {
-
-  //     const users = [];
-  //     fullUsers.map((x) => {
-  //       if (_.includes(x.username, term) || _.includes(x.email, term)) {
-  //         users.push(x)
-  //       }
-  //     });
-  //     setUsers(users);
-  //     setCurrentPage(1);
-  //     let totalItems = users.length;
-  //     let totalPages = Math.ceil(totalItems / 1); // 1 record per page
-  //     let startIndex = (currentPage - 1) * 1;
-  //     let endIndex = Math.min(startIndex + 1 - 1, totalItems - 1); // end index of current page
-  //     const currentUsers = users.slice(startIndex, endIndex + 1); // users to display in current page
-  //   }
-
-
-  // };
-   
   const getAllUsers = async () => {
     try {
       axios
@@ -216,19 +187,6 @@ function RequestFund() {
         .catch((error) => {
           setError(error.message);
         });
-      // const response = await fetch(base_url + 'users/allUsers', {
-      //     method: 'GET',
-      //     headers: {
-      //         'Content-Type': 'application/json',
-      //         'authorization': 'Bearer ' +token
-      //     },
-      // });
-      // const data = await response.json();
-      // if (response.ok) {
-      //     setUsers(data.users);
-      // } else {
-      //     setError(data.message);
-      // }
     } catch (error) {
       setError("An error occurred. Please try again.");
     }
@@ -254,20 +212,6 @@ function RequestFund() {
           setError(error.message);
           navigate("/login");
         });
-      // const response = await fetch(base_url + 'users/logout', {
-      //     method: 'POST',
-      //     headers: {
-      //         'Content-Type': 'application/json'
-      //     },
-      // });
-      // const data = await response.json();
-      // if (response.ok) {
-      //     localStorage.removeItem('token');
-      //     localStorage.removeItem('user');
-      //     navigate('/login');
-      // } else {
-      //     setError(data.message);
-      // }
     } catch (error) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
@@ -623,24 +567,35 @@ function RequestFund() {
                     <div className="col-lg-12">
                       <div className="card">
                         <div className="card-header">
-                          <h4 className="card-title mb-0">Fund Request</h4>
+                          <h4 className="card-title mb-0">Wallet Amount Transfer</h4>
                         </div>
                         {/* <!-- end card header --> */}
 
                         <div className="card-body">
                           <div className="row">
-                            <div className="col-lg-6 col-sm-6">
+                            <div className="col-lg-4 col-md-4 col-sm-6">
                               <div>
-                                <label htmlFor="requestedAmount" className="text-muted text-uppercase fw-semibold">Enter Required Amount (In Dollars only)</label>
+                                <label htmlFor="sentAmount" className="text-muted text-uppercase fw-semibold">Enter Sending Amount (In Dollars only)</label>
                               </div>
                               <div className="mb-2">
-                                <input type="text" value={amount_requested}  onChange={(e) => setRequestFund(e.target.value)} className="form-control bg-light border-0" id="requestedAmount" placeholder="Request Amount" required />
+                                <input type="text" value={sent_amount}  onChange={(e) => setSentAmount(e.target.value)} className="form-control bg-light border-0" id="sentAmount" placeholder="Sending Amount" required />
                                 <div className="invalid-feedback">
                                   Please enter Valid Amount
                                 </div>
                               </div>
                             </div>
-                            <div className="col-lg-6 col-sm-6">
+                            <div className="col-lg-4 col-md-4 col-sm-6">
+                              <div>
+                                <label htmlFor="recieverId" className="text-muted text-uppercase fw-semibold">Reciever ID</label>
+                              </div>
+                              <div className="mb-2">
+                                <input type="text" value={reciever_id}  onChange={(e) => setRecieverId(e.target.value)} className="form-control bg-light border-0" id="recieverId" placeholder="Reciever ID" required />
+                                <div className="invalid-feedback">
+                                  Please enter Valid Reciever ID
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-lg-4 col-md-4 col-sm-6">
                               <div>
                                 <label htmlFor="transactionPassword" className="text-muted text-uppercase fw-semibold">Enter Transaction Pasword</label>
                               </div>
@@ -658,7 +613,7 @@ function RequestFund() {
                               </div>
                             </div>
                             <div className="mt-4">
-                                <button className="btn btn-success w-100" onClick={requestAmount}>Send Request</button>
+                                <button className="btn btn-success w-100" onClick={transferAmount}>Send Amount</button>
                               </div>
                           </div>
                         </div>
@@ -669,67 +624,9 @@ function RequestFund() {
                     {/* <!-- end col --> */}
                   </div>
                   {/* <!-- end row --> */}
-
                 </div>
               </div>
             </div>
-            <div className="row">
-                        <div className="col-lg-12">
-                            <div className="card">
-                                <div className="card-header">
-                                    <h4 className="card-title mb-0">Dropzone</h4>
-                                </div>
-                                {/* <!-- end card header --> */}
-
-                                <div className="card-body">
-                                    <p className="text-muted">drag and drop file uploads with image previews.</p>
-
-                                    <div className="dropzone">
-                                        <div className="fallback">
-                                            <input name="file" type="file"  />
-                                        </div>
-                                        <div className="dz-message needsclick">
-                                            <div className="mb-3">
-                                                <i className="display-4 text-muted ri-upload-cloud-2-fill"></i>
-                                            </div>
-
-                                            <h4>Drop files here or click to upload.</h4>
-                                        </div>
-                                    </div>
-
-                                    <ul className="list-unstyled mb-0" id="dropzone-preview">
-                                        <li className="mt-2" id="dropzone-preview-list">
-                                            {/* <!-- This is used as the file preview template --> */}
-                                            <div className="border rounded">
-                                                <div className="d-flex p-2">
-                                                    <div className="flex-shrink-0 me-3">
-                                                        <div className="avatar-sm bg-light rounded">
-                                                            <img data-dz-thumbnail className="img-fluid rounded d-block" src="assets/images/new-document.png" alt="Dropzone-Image" />
-                                                        </div>
-                                                    </div>
-                                                    <div className="flex-grow-1">
-                                                        <div className="pt-1">
-                                                            <h5 className="fs-14 mb-1" data-dz-name>&nbsp;</h5>
-                                                            <p className="fs-13 text-muted mb-0" data-dz-size></p>
-                                                            <strong className="error text-danger" data-dz-errormessage></strong>
-                                                        </div>
-                                                    </div>
-                                                    <div className="flex-shrink-0 ms-3">
-                                                        <button data-dz-remove className="btn btn-sm btn-danger">Delete</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                    {/* <!-- end dropzon-preview --> */}
-                                </div>
-                                {/* <!-- end card body --> */}
-                            </div>
-                            {/* <!-- end card --> */}
-                        </div> 
-                        {/* <!-- end col --> */}
-                    </div>
-                    {/* <!-- end row --> */}
           </div>
         </div>
 
@@ -752,4 +649,4 @@ function RequestFund() {
   );
 }
 
-export default RequestFund;
+export default WalletTransfer;

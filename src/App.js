@@ -13,6 +13,7 @@ import RequestFundHistory from "./pages/requestfundhistory/requestfundhistory";
 import RequestFund from "./pages/requestfund/requestfund";
 import PendingWithdraw from "./pages/pendingwithdraw/pendingwithdraw";
 import CompletedWithdraw from "./pages/completedwithdraw/completedwithdraw";
+import WalletTransfer from "./pages/wallettransfer/wallettransfer";
 
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
           <Route path="/requestfund" element={<RequestFund />} />
           <Route path="/pendingwithdraw" element={<PendingWithdraw />} />
           <Route path="/completedwithdraw" element={<CompletedWithdraw />} />
+          <Route path="/wallettransfer" element={<WalletTransfer />} />
           <Route path="/" element={<Login />}>
         </Route>
       </Routes>

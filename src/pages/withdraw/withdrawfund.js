@@ -62,10 +62,12 @@ const withdrawAmount = async (e) => {
     const response = await axios.post(
       base_url + "users/" + user._id + "/transactionPassword",
       { username, transactionPassword }
-    );
-    const transactionPasswordHash = response.data.transactionPassword;
-    console.log("Transaction Password Hash:", transactionPasswordHash);
-    console.log("Entered Password:", transactionPassword);
+    )
+    .catch((error) => {
+      setNotify(toast("Withdraw Amount Or Transaction password you entered is incorrect. Please try again."));
+      setError(error.message);
+    });
+    const transactionPasswordHash = response.data.user.transactionPassword;
 
     // Compare the entered password with the stored hash
     const isTransactionPasswordMatch = await bcrypt.compare(transactionPassword, transactionPasswordHash);
@@ -660,16 +662,16 @@ const withdrawAmount = async (e) => {
                             </div>
                             <div className="col-lg-6 col-sm-6">
                               <div>
-                                <label htmlFor="requestedAmount" className="text-muted text-uppercase fw-semibold">Enter Transaction Pasword</label>
+                                <label htmlFor="transactionPassword" className="text-muted text-uppercase fw-semibold">Enter Transaction Pasword</label>
                               </div>
                               <div className="mb-2">
                                 <input type="text" 
-                                className="form-control"
+                                className="form-control bg-light border-0"
                                 id="transactionPassword"
                                 name="transactionPassword"
                                 value={transactionPassword}
                                 onChange={handleTransactionPasswordChange}
-                                 placeholder="Withdraw Amount" required />
+                                 placeholder="Transaction Password" required />
                                 <div className="invalid-feedback">
                                   Please enter Valid Password
                                 </div>
