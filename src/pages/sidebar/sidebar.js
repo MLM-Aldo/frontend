@@ -38,7 +38,7 @@ function Sidebar() {
                     </button>
                 </div>
 
-                <div id="scrollbar">
+                <div id="scrollbar" data-simplebar="init">
                     <div className="container-fluid">
                         <div id="two-column-menu"></div>
                         <ul className="navbar-nav" id="navbar-nav">

@@ -1,12 +1,12 @@
 // import { Tree, TreeNode } from "react-organizational-chart";
-import styled from 'styled-components';
-import { useEffect, useState, React } from "react";
-import { useNavigate } from 'react-router-dom';
 import axios from "axios";
-import Tree from 'react-d3-tree';
-import Header from '../header/header';
-import Footer from '../footer/footer';
-import Sidebar from '../sidebar/sidebar';
+import { React, useEffect, useState } from "react";
+import Tree from "react-d3-tree";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import Footer from "../footer/footer";
+import Header from "../header/header";
+import Sidebar from "../sidebar/sidebar";
 
 function LevelTree() {
   const StyledNode = styled.div`
@@ -18,21 +18,20 @@ function LevelTree() {
 
   const navigate = useNavigate();
   const base_url = process.env.REACT_APP_API_URL;
-  const user = JSON.parse(localStorage.getItem('user'))
-  const [error, setError] = useState('');
-  const [refferalBonus,setRefferalBonus] = useState(0);
-  
+  const user = JSON.parse(localStorage.getItem("user"));
+  const [error, setError] = useState("");
+  const [refferalBonus, setRefferalBonus] = useState(0);
 
   const containerStyles = {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100vh',
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100vh",
   };
 
   const svgStyles = {
     height: 500,
-    width: '100%',
+    width: "100%",
   };
 
   const getAllUsers = async () => {
@@ -41,15 +40,16 @@ function LevelTree() {
       axios
         .get(base_url + "users/referrals/" + referralId)
         .then((response) => {
-          response.data.users[0].name =  response.data.users[0].username
-          response.data.users[0].username =  undefined
-          response.data.users[0].reportingHierarchy = response.data.users[0].reportingHierarchy.map(user => {
-            return {
-              ...user,
-              name: user.username,
-              username: undefined
-            };
-          });
+          response.data.users[0].name = response.data.users[0].username;
+          response.data.users[0].username = undefined;
+          response.data.users[0].reportingHierarchy =
+            response.data.users[0].reportingHierarchy.map((user) => {
+              return {
+                ...user,
+                name: user.username,
+                username: undefined,
+              };
+            });
           let rootData = JSON.parse(JSON.stringify(response.data.users[0]));
           delete rootData["reportingHierarchy"];
           response.data.users[0].reportingHierarchy.unshift(rootData);
@@ -69,7 +69,6 @@ function LevelTree() {
           console.log(error.message);
         });
 
-        
       // const response = await fetch(base_url + 'users/referrals/' + referralId, {
       //   method: 'GET',
       //   headers: {
@@ -95,14 +94,14 @@ function LevelTree() {
     } catch (error) {
       console.log("An error occurred. Please try again.");
     }
-  }
+  };
 
   const [users, setUsers] = useState([]);
 
-  useEffect(()=>{
-    let token = localStorage.getItem('token');
-    if(!token) {
-        navigate('/login');
+  useEffect(() => {
+    let token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
     }
 
     axios
@@ -113,11 +112,11 @@ function LevelTree() {
       .catch((error) => {
         setError(error.message);
       });
-},[])
-  const nest = (items, referralCode, link = 'referredBy') =>
+  }, []);
+  const nest = (items, referralCode, link = "referredBy") =>
     items
-      .filter(item => item[link] === referralCode)
-      .map(item => ({ ...item, children: nest(items, item.referralCode) }));
+      .filter((item) => item[link] === referralCode)
+      .map((item) => ({ ...item, children: nest(items, item.referralCode) }));
 
   const logout = async (e) => {
     e.preventDefault();
@@ -166,13 +165,12 @@ function LevelTree() {
     return (
       <g>
         <circle r={10} fill="#fff" stroke="#000" strokeWidth={1} />
-        <text x="-25" y="25" style={{ fontSize: '12px' }}>
+        <text x="-25" y="25" style={{ fontSize: "12px" }}>
           {nodeData.username}
         </text>
       </g>
     );
   };
-  
 
   // const renderTreeNodes = (nodes) => {
   //   return (
@@ -185,14 +183,52 @@ function LevelTree() {
   //   );
   // };
 
+  const myTreeData = [
+    {
+      name: "Root Node",
+      attributes: {
+        age: 35,
+        gender: "male",
+      },
+      children: [
+        {
+          name: "Child Node 1",
+          attributes: {
+            age: 10,
+            gender: "female",
+          },
+          children: [
+            {
+              name: "Grandchild Node 1",
+              attributes: {
+                age: 5,
+                gender: "male",
+              },
+            },
+            {
+              name: "Grandchild Node 2",
+              attributes: {
+                age: 7,
+                gender: "female",
+              },
+            },
+          ],
+        },
+        {
+          name: "Child Node 2",
+          attributes: {
+            age: 12,
+            gender: "male",
+          },
+        },
+      ],
+    },
+  ];
 
   return (
-
     <div id="layout-wrapper">
       <Header />
-
-      <Sidebar />      
-
+      <Sidebar />
       <div className="main-content">
         <div className="page-content">
           <div className="container-fluid">
@@ -204,22 +240,24 @@ function LevelTree() {
                       <h4 className="card-title mb-0">Level</h4>
                     </div>
                     {/* <!-- end card header --> */}
-
-                    <div className="card-body" style={{height: "800px", display: 'flex', justifyContent: 'center'}}>
-                      {users.length > 0 && users[0].children &&
+                    <div
+                      className="card-body"
+                      style={{
+                        height: "78vh",
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
+                      {users.length > 0 && users[0].children && (
+                        // Middle
                         <Tree
-                        data={users}
-                        nodeSvgShape={{
-                          shape: 'circle',
-                          shapeProps: { r: 10, fill: '#fff', stroke: '#000', strokeWidth: 1 },
-                        }}
-                        nodeLabelComponent={{
-                          render: <MyNodeComponent />,
-                          foreignObjectWrapper: {
-                            y: 30,
-                          },
-                        }}
-                      />}
+                          data={users}
+                          translate={{ x: window.innerWidth / 2 - 200, y: 50 }}
+                          orientation="vertical"
+                          collapsible={true}
+                          nodeSize={{ x: 150, y: 150 }}
+                        />
+                      )}
                     </div>
                   </div>
                 </div>
@@ -227,11 +265,9 @@ function LevelTree() {
             </div>
           </div>
         </div>
-
         <Footer />
       </div>
     </div>
-
   );
 }
 

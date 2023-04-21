@@ -10,6 +10,7 @@ import Sidebar from "../sidebar/sidebar";
 import Header from "../header/header";
 import Footer from "../footer/footer";
 
+
 function WalletTransfer() {
 
   const base_url = process.env.REACT_APP_API_URL;
@@ -20,6 +21,7 @@ function WalletTransfer() {
   const [fullUsers, setFullUsers] = useState();
   const [refferalBonus, setRefferalBonus] = useState(0);  
   const [notify, setNotify] = useState("");
+  const [receiver_id, setReceiverId] = useState("");
 
   const user = JSON.parse(localStorage.getItem('user'));
 
@@ -46,43 +48,73 @@ function WalletTransfer() {
 
   const transferAmount = async (e) => {
     e.preventDefault();
+    const username = user.username;
+    const user_id = user._id;
+  
     try {
-      const username = user.username;
-      const response = await axios.post(
+      const postResponse = await axios.post(
         base_url + "users/" + user._id + "/transactionPassword",
         { username, transactionPassword }
-      )
-        .catch((error) => {
-          setNotify(toast("Withdraw Amount Or Transaction password you entered is incorrect. Please try again."));
-          setError(error.message);
-        });
-      const transactionPasswordHash = response.data.user.transactionPassword;
-
-      // Compare the entered password with the stored hash
-      const isTransactionPasswordMatch = await bcrypt.compare(transactionPassword, transactionPasswordHash);
+      );
+  
+      const transactionPasswordHash = postResponse.data.user.transactionPassword;
+  
+      // Compare the entered transaction password with the stored hashed password
+      const isTransactionPasswordMatch = await bcrypt.compare(
+        transactionPassword,
+        transactionPasswordHash
+      );
+  
       console.log("Password Match:", isTransactionPasswordMatch);
-
+  
       if (!isTransactionPasswordMatch) {
         setNotify(toast("Transaction password is incorrect. Please try again."));
         return;
       }
-      axios
-        .put(
-          base_url + "users/"+ user._id + "/UsersTransactions",
-          JSON.stringify({ reciever_id, sent_amount })
-        )
-        .then((response) => {
-          setSentAmount("");
-          console.log(sent_amount);
-          setNotify(toast("Amount Sent successfully!"))
-        })
-        .catch((error) => {
-          setError(error.message);
-        });
     } catch (error) {
-      setError("An error occurred. Please try again.");
+      console.log(error);
+      setNotify(toast("An error occurred while processing your request. Please try again later."));
+      return;
+    }
+  
+    try {
+      // Send the receiver id in the request body
+      const requestData = {
+        receiver: receiver_id
+      };
+  
+      const config = { headers: { "Content-Type": "text/html" } };
+      const response = await axios.post(
+        base_url + "users/" + user._id + "/getReceiverDetails",
+        requestData,
+        config
+      );
+  
+      const receiverData = response.data;
+      
+      // Check if the receiver id entered by the user is valid
+      if (!receiverData) {
+        setNotify(toast("Receiver not found. Please enter a valid receiver id."));
+        return;
+      }
+  
+      requestData.user_id = user_id;
+  
+      const transactionResponse = await axios.post(
+        base_url + "users/" + user._id + "/UsersTransactions",
+        requestData,
+        config
+      );
+  
+      setSentAmount("");
+      setNotify(toast("Amount sent successfully!"));
+    } catch (error) {
+      console.log(error);
+      setNotify(toast("An error occurred while processing your request. Please try again later."));
     }
   };
+  
+  
 
 
   useEffect(() => {
@@ -199,30 +231,6 @@ function WalletTransfer() {
     setCurrentPage(pageNumber);
   };
 
-  const logout = async (e) => {
-    e.preventDefault();
-    try {
-      axios
-        .post(base_url + "users/logout", null)
-        .then((response) => {
-          localStorage.removeItem("token");
-          localStorage.removeItem("user");
-          navigate("/login");
-        })
-        .catch((error) => {
-          localStorage.removeItem("token");
-          localStorage.removeItem("user");
-          setError(error.message);
-          navigate("/login");
-        });
-    } catch (error) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      navigate('/login');
-      setError('An error occurred. Please try again.');
-    }
-  };
-
 
   useEffect(() => {
     getAllUsers();
@@ -269,7 +277,7 @@ function WalletTransfer() {
                                 <label htmlFor="recieverId" className="text-muted text-uppercase fw-semibold">Reciever ID</label>
                               </div>
                               <div className="mb-2">
-                                <input type="text" value={reciever_id}  onChange={(e) => setRecieverId(e.target.value)} className="form-control bg-light border-0" id="recieverId" placeholder="Reciever ID" required />
+                                <input type="text" value={receiver_id} onChange={(e) => setReceiverId(e.target.value)} className="form-control bg-light border-0" id="recieverId" placeholder="Reciever ID" required />
                                 <div className="invalid-feedback">
                                   Please enter Valid Reciever ID
                                 </div>

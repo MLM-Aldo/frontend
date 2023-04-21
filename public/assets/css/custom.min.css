@@ -18,4 +18,6 @@
 .profile-wid-bg:before{
     background: #9e9e9e;
 }
-
+.topbar-user{
+    background-color: transparent !important;
+}

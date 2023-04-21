@@ -74,30 +74,6 @@ function RequestFundHistory() {
     getAllrequest();
   }, []);
 
-  const logout = async (e) => {
-    e.preventDefault();
-    try {
-      axios
-        .post(base_url + "users/logout", null)
-        .then((response) => {
-          localStorage.removeItem("token");
-          localStorage.removeItem("user");
-          navigate("/login");
-        })
-        .catch((error) => {
-          localStorage.removeItem("token");
-          localStorage.removeItem("user");
-          setError(error.message);
-          navigate("/login");
-        });
-    } catch (error) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      navigate('/login');
-      setError('An error occurred. Please try again.');
-    }
-  };
-
  const requests = requestFundHistory.map(item => ({
   request: { amount_requested: item.amount_requested }
 }));
@@ -122,18 +98,6 @@ for (const item of requests) {
     pageNumbers.push(i);
   }
 
-  const handleDeleteWithdraw = (withdrawId) => {
-    axios
-      .delete(base_url + "users/" + user._id + "/requestFundHistory/" + withdrawId)
-      .then((response) => {
-        toast.success("Withdrawal deleted successfully");
-        getAllrequest();
-      })
-      .catch((error) => {
-        console.error(error);
-        setError(error.message);
-      });
-  };
 
 
 

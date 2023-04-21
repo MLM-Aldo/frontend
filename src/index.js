@@ -1,19 +1,26 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import axios from 'axios';
+import axios from "axios";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import "./index.css";
+import reportWebVitals from "./reportWebVitals";
 
-axios.interceptors.request.use((config) => {
-  config.headers['Content-Type'] = 'application/json';
-  config.headers['authorization'] = 'Bearer ' +localStorage.getItem('token');
-  return config;
-}, (error) => {
-  return Promise.reject(error);
-});
+axios.interceptors.request.use(
+  (config) => {
+    // if content-type is not set, set it to application/json
+    if (!config.headers["Content-Type"]) {
+      config.headers["Content-Type"] = "application/json";
+    }
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+    config.headers["authorization"] = "Bearer " + localStorage.getItem("token");
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <App />
